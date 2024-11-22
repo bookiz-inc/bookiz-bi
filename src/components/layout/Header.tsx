@@ -45,9 +45,9 @@ export default function Header() {
               className="flex items-center gap-2 hover:bg-gray-50 p-2 rounded-md"
             >
               <div className="h-8 w-8 rounded-full bg-primary-200 overflow-hidden">
-                {user?.profileImageUrl && (
+                {user?.imageUrl && (
                   <img 
-                    src={user.profileImageUrl} 
+                    src={user.imageUrl} 
                     alt="Profile" 
                     className="h-full w-full object-cover"
                   />
