@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useUser } from "@clerk/nextjs";
-import Image from 'next/image';
+import { useUser, useClerk } from "@clerk/nextjs";
 import { 
   LayoutDashboard, 
   Users, 
   BarChart3, 
   Settings,
+  BookOpen,
+  LogOut
 } from "lucide-react";
 
 const navigation = [
@@ -37,19 +38,17 @@ const navigation = [
 export default function Sidebar() {
   const pathname = usePathname();
   const { user } = useUser();
+  const { signOut } = useClerk();
 
   return (
     <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-72 lg:flex-col">
-      <div className="flex flex-col flex-grow border-r border-gray-200 bg-white pt-5 pb-4">
-      <div className="flex items-center flex-shrink-0 px-4">
-                    <Image
-                        src="/images/bookiz-logo.png"  // Put your logo in the public/images folder
-                        alt="Bookiz Logo"
-                        width={32}
-                        height={32}
-                    />
-          <span className="ml-3 text-xl font-bold">Bookiz</span>
+      <div className="flex flex-col flex-grow border-r border-gray-200 bg-white pt-5">
+        {/* Logo */}
+        <div className="flex items-center flex-shrink-0 px-4">
+          <BookOpen className="h-8 w-8 text-primary-600" />
+          <span className="ml-3 text-xl font-bold text-gray-900">Bookiz</span>
         </div>
+
         {/* Navigation */}
         <div className="mt-8 flex-grow flex flex-col">
           <nav className="flex-1 space-y-1 px-2" aria-label="Sidebar">
@@ -84,9 +83,9 @@ export default function Sidebar() {
           </nav>
         </div>
 
-        {/* User Profile */}
-        <div className="flex-shrink-0 flex border-t border-gray-200 p-4">
-          <div className="flex items-center w-full">
+        {/* User Profile and Sign Out */}
+        <div className="flex-shrink-0 border-t border-gray-200">
+          <div className="flex items-center p-4">
             <div className="h-8 w-8 rounded-full bg-primary-200 overflow-hidden">
               {user?.profileImageUrl && (
                 <img 
@@ -105,6 +104,15 @@ export default function Sidebar() {
               </p>
             </div>
           </div>
+          
+          {/* Sign Out Button */}
+          <button
+            onClick={() => signOut()}
+            className="w-full flex items-center px-4 py-3 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors duration-150 ease-in-out"
+          >
+            <LogOut className="mr-3 h-5 w-5 text-gray-400" />
+            Sign Out
+          </button>
         </div>
       </div>
     </div>
