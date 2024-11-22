@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { MoreHorizontal, Mail, Phone, ExternalLink } from "lucide-react";
 
-// Mock data - replace with actual API call
 const MOCK_USERS = [
   {
     id: 1,
@@ -33,7 +32,6 @@ const MOCK_USERS = [
     role: "user",
     lastLogin: "2024-02-15",
   },
-  // Add more mock users as needed
 ];
 
 interface UsersTableProps {
@@ -58,7 +56,7 @@ export default function UsersTable({ searchQuery }: UsersTableProps) {
   };
 
   const handleActionClick = (e: React.MouseEvent, userId: number) => {
-    e.stopPropagation(); // Prevent row click when clicking action button
+    e.stopPropagation();
     setSelectedUser(selectedUser === userId ? null : userId);
   };
 
@@ -98,7 +96,7 @@ export default function UsersTable({ searchQuery }: UsersTableProps) {
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
                     <div className="h-10 w-10 flex-shrink-0">
-                      <div className="h-10 w-10 rounded-full bg-gray-200" />
+                      <div className="h-10 w-10 rounded-full bg-primary-200" />
                     </div>
                     <div className="ml-4">
                       <div className="text-sm font-medium text-gray-900">{user.name}</div>
@@ -124,17 +122,17 @@ export default function UsersTable({ searchQuery }: UsersTableProps) {
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
                     user.status === 'active' 
-                      ? 'bg-green-100 text-green-800' 
+                      ? 'bg-primary-100 text-primary-800' 
                       : 'bg-gray-100 text-gray-800'
                   }`}>
                     {user.status}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-6 py-4 whitespace-nowrap">
                   <span className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
                     user.role === 'admin' 
-                      ? 'bg-purple-100 text-purple-800' 
-                      : 'bg-blue-100 text-blue-800'
+                      ? 'bg-primary-100 text-primary-800' 
+                      : 'bg-gray-100 text-gray-800'
                   }`}>
                     {user.role}
                   </span>
