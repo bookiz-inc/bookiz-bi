@@ -3,10 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useUser, useClerk } from "@clerk/nextjs";
-import { 
-  LayoutDashboard, 
-  Users, 
-  BarChart3, 
+import {
+  LayoutDashboard,
+  Users,
+  BarChart3,
   Settings,
   BookOpen,
   LogOut
@@ -55,7 +55,7 @@ export default function Sidebar() {
             {navigation.map((item) => {
               const isActive = pathname === item.href;
               const Icon = item.icon;
-              
+
               return (
                 <Link
                   key={item.name}
@@ -87,10 +87,10 @@ export default function Sidebar() {
         <div className="flex-shrink-0 border-t border-gray-200">
           <div className="flex items-center p-4">
             <div className="h-8 w-8 rounded-full bg-primary-200 overflow-hidden">
-              {user?.profileImageUrl && (
-                <img 
-                  src={user.profileImageUrl} 
-                  alt="Profile" 
+              {user?.imageUrl && (
+                <img
+                  src={user.imageUrl}
+                  alt="Profile"
                   className="h-full w-full object-cover"
                 />
               )}
@@ -104,7 +104,7 @@ export default function Sidebar() {
               </p>
             </div>
           </div>
-          
+
           {/* Sign Out Button */}
           <button
             onClick={() => signOut()}
