@@ -1,3 +1,5 @@
+import { DashboardData } from "@/types/api";
+
 const API_URL = 'https://api.bookiz.co.il/api/v1';
 const API_TOKEN = 'LQgKxwDyjFnhCkRfayEXPpxFWpAWZpT0XsYu3VTSzhCDT8xqMI9TO3o2PmhKxsyM';
 
