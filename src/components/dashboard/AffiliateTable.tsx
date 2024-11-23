@@ -37,31 +37,39 @@ export default function AffiliateTable({ data, totalAffiliates }: AffiliateTable
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {data.map((item, index) => (
-              <motion.tr
-                key={item.affiliate || 'none'}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-              >
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {item.affiliate || 'No Affiliate'}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {item.total_users}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="w-full bg-gray-200 rounded-full h-2.5">
-                    <motion.div
-                      className="bg-primary-600 h-2.5 rounded-full"
-                      initial={{ width: 0 }}
-                      animate={{ width: `${(item.total_users / Math.max(...data.map(d => d.total_users))) * 100}%` }}
-                      transition={{ duration: 0.5, delay: index * 0.1 }}
-                    />
-                  </div>
-                </td>
-              </motion.tr>
-            ))}
+            {data.map((item, index) => {
+              // Create a unique key using index and affiliate value
+              const uniqueKey = `affiliate-${item.affiliate || 'none'}-${index}`;
+              return (
+                <motion.tr
+                  key={uniqueKey}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                >
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {item.affiliate === null ? 'No Affiliate' : 
+                     item.affiliate === '' ? 'Empty' : 
+                     item.affiliate}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {item.total_users}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="w-full bg-gray-200 rounded-full h-2.5">
+                      <motion.div
+                        className="bg-primary-600 h-2.5 rounded-full"
+                        initial={{ width: 0 }}
+                        animate={{ 
+                          width: `${(item.total_users / Math.max(...data.map(d => d.total_users))) * 100}%` 
+                        }}
+                        transition={{ duration: 0.5, delay: index * 0.1 }}
+                      />
+                    </div>
+                  </td>
+                </motion.tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

@@ -23,3 +23,24 @@ export async function fetchDashboardData() {
     throw error;
   }
 }
+
+
+// Add this function to your existing api.ts
+export async function fetchSMSBalance() {
+    try {
+      const response = await fetch('https://sms.bookiz.co.il/019sms/balance', {
+        headers: {
+          'accept': 'application/json'
+        }
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to fetch SMS balance');
+      }
+  
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching SMS balance:', error);
+      throw error;
+    }
+  }
