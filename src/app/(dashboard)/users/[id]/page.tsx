@@ -1,13 +1,6 @@
 import { Suspense } from 'react';
 import UserDetailContent from '@/components/users/detail/UserDetailContent';
 
-interface PageProps {
-    params: {
-        id: string;
-    };
-    searchParams: { [key: string]: string | string[] | undefined };
-}
-
 // @ts-ignore
 export default function UserDetailPage({ params }) {
     return (
