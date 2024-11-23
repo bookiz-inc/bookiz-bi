@@ -4,12 +4,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useUser, useClerk } from "@clerk/nextjs";
 import { useState } from "react";
+import Image from 'next/image';
 import {
   LayoutDashboard,
   Users,
   BarChart3,
   Settings,
-  BookOpen,
   LogOut,
   Menu,
   X
@@ -49,18 +49,23 @@ export default function Sidebar() {
         {/* Mobile menu button */}
         <div className="lg:hidden fixed top-0 left-0 w-full bg-white border-b border-gray-200 px-4 py-3 z-50">
           <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <BookOpen className="h-8 w-8 text-primary-600" />
-              <span className="ml-3 text-xl font-bold text-gray-900">Bookiz</span>
+            <div className="flex items-center flex-shrink-0 px-4">
+              <Image
+                  src="/images/bookiz-logo.png"  // Put your logo in the public/images folder
+                  alt="Bookiz Logo"
+                  width={32}
+                  height={32}
+              />
+              <span className="ml-3 text-xl font-bold text-black">Bookiz</span>
             </div>
             <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="p-2 rounded-md text-gray-500 hover:bg-gray-100"
             >
               {isMobileMenuOpen ? (
-                  <X className="h-6 w-6" />
+                  <X className="h-6 w-6"/>
               ) : (
-                  <Menu className="h-6 w-6" />
+                  <Menu className="h-6 w-6"/>
               )}
             </button>
           </div>
@@ -144,8 +149,13 @@ export default function Sidebar() {
           <div className="flex flex-col flex-grow border-r border-gray-200 bg-white pt-5">
             {/* Logo */}
             <div className="flex items-center flex-shrink-0 px-4">
-              <BookOpen className="h-8 w-8 text-primary-600" />
-              <span className="ml-3 text-xl font-bold text-gray-900">Bookiz</span>
+              <Image
+                  src="/images/bookiz-logo.png"  // Put your logo in the public/images folder
+                  alt="Bookiz Logo"
+                  width={32}
+                  height={32}
+              />
+              <span className="ml-3 text-xl font-bold text-black">Bookiz</span>
             </div>
 
             {/* Navigation */}
@@ -210,7 +220,7 @@ export default function Sidebar() {
                   className="w-full flex items-center px-4 py-3 text-sm font-medium text-gray-600
                        hover:bg-gray-50 hover:text-gray-900 transition-colors duration-150 ease-in-out"
               >
-                <LogOut className="mr-3 h-5 w-5 text-gray-400" />
+                <LogOut className="mr-3 h-5 w-5 text-gray-400"/>
                 Sign Out
               </button>
             </div>
