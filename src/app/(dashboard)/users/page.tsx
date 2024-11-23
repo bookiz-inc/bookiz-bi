@@ -11,7 +11,7 @@ export default function UsersPage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Users</h1>
+        <h1 className="text-3xl font-bold text-black">Users</h1>
       </div>
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -26,7 +26,7 @@ export default function UsersPage() {
               placeholder="Search by name, email, or phone..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="block w-full rounded-md border border-gray-200 py-2 pl-10 pr-3 text-sm 
+              className="block w-full rounded-md border border-gray-200 py-2 pl-10 pr-3 text-sm
                        placeholder:text-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
           </div>

@@ -12,7 +12,8 @@ import {
   Settings,
   LogOut,
   Menu,
-  X
+  X,
+  Link as LinkIcon
 } from "lucide-react";
 
 const navigation = [
@@ -25,6 +26,11 @@ const navigation = [
     name: "Users",
     href: "/users",
     icon: Users,
+  },
+  {
+    name: "Affiliations", // Add this new item
+    href: "/affiliations",
+    icon: LinkIcon,
   },
   {
     name: "Analytics",
