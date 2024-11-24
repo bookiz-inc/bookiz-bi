@@ -2,13 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
-    Users, 
-    Building2, 
-    Calendar, 
-    Briefcase, 
+import {
+    Users,
+    Building2,
+    Calendar,
+    Briefcase,
     RefreshCw,
-    AlertCircle 
+    AlertCircle
 } from 'lucide-react';
 import { fetchDashboardData, fetchSMSBalance } from '@/services/api';
 import type { DashboardData } from '@/types/api';
@@ -155,14 +155,14 @@ export default function DashboardPage() {
                     value={data.general_counts.customers_users_count}
                     icon={Users}
                     description="Registered customers"
-                    color="teal"
+                    color="pink"
                 />
                 <StatsCard
                     title="Total Services"
                     value={data.general_counts.total_services_count}
                     icon={Briefcase}
                     description="Available services"
-                    color="indigo"
+                    color="primary"
                 />
                 <StatsCard
                     title="Businesses with Affiliates"
