@@ -33,7 +33,6 @@ export default function UserAffiliation({ userId }: UserAffiliationProps) {
 
       if (!response.ok) {
         if (response.status === 404) {
-          // User wasn't referred by an affiliate
           setAffiliation(null);
           return;
         }
@@ -100,23 +99,49 @@ export default function UserAffiliation({ userId }: UserAffiliationProps) {
   if (!affiliation) {
     return (
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
         className="bg-white rounded-lg shadow-sm p-6"
       >
         <div className="text-center">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 mb-4">
-            <UserCheck className="h-6 w-6 text-gray-600" />
-          </div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No Affiliation Data</h3>
-          <p className="text-sm text-gray-500">
-            This user wasn't referred through an affiliate program.
-          </p>
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ 
+              type: "spring",
+              stiffness: 260,
+              damping: 20 
+            }}
+            className="text-5xl mb-4"
+          >
+            🌟
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              Direct Registration
+            </h3>
+            <p className="text-sm text-gray-500 max-w-sm mx-auto">
+              This user discovered Bookiz directly and registered without a referral code.
+            </p>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            className="mt-6"
+          >
+           
+          </motion.div>
         </div>
       </motion.div>
     );
   }
 
+  // ... rest of the component for displaying affiliation data ...
   const formattedDate = new Date(affiliation.referral_date).toLocaleDateString('he-IL', {
     year: 'numeric',
     month: 'long',
