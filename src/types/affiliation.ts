@@ -13,3 +13,10 @@ export interface Affiliation {
   updated_at: string;
   user: number;
 }
+
+export interface CreateAffiliationData {
+  firstName: string;
+  lastName: string;
+  userId: string;
+  linkName: string;
+}
