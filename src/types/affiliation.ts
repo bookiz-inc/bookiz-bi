@@ -1,18 +1,15 @@
 export interface Affiliation {
-    id: string;
-    firstName: string;
-    lastName: string;
-    userId: string;
-    linkName: string;
-    createdAt: string;
-    totalReferrals: number;
-    status: 'active' | 'inactive';
-    revenue: number;
-  }
-  
-  export interface CreateAffiliationData {
-    firstName: string;
-    lastName: string;
-    userId: string;
-    linkName: string;
-  }
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  alias: string;
+  tax_id: string;
+  phone_number: string;
+  instagram: string | null;
+  facebook: string | null;
+  tier: 'BRONZE' | 'SILVER' | 'GOLD' | 'PLATINUM';
+  created_at: string;
+  updated_at: string;
+  user: number;
+}

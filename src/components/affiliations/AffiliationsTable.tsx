@@ -2,75 +2,139 @@
 
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
+import { Instagram, Facebook, Award, ExternalLink, Mail, Phone } from 'lucide-react';
 import type { Affiliation } from '@/types/affiliation';
 
-interface AffiliationsTableProps {
-  affiliations: Affiliation[];
+interface AffiliatesTableProps {
+  affiliates: Affiliation[];
 }
 
-export default function AffiliationsTable({ affiliations }: AffiliationsTableProps) {
+export default function AffiliatesTable({ affiliates }: AffiliatesTableProps) {
   const router = useRouter();
 
+  const getTierColor = (tier: string) => {
+    switch (tier) {
+      case 'PLATINUM': return 'bg-gray-100 text-gray-800';
+      case 'GOLD': return 'bg-yellow-100 text-yellow-800';
+      case 'SILVER': return 'bg-blue-100 text-blue-800';
+      default: return 'bg-orange-100 text-orange-800';
+    }
+  };
+
   return (
-    <div className="bg-white rounded-lg shadow overflow-hidden">
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
-          <tr>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Name
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Link Name
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Total Referrals
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Revenue
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Status
-            </th>
-          </tr>
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
-          {affiliations.map((affiliation, index) => (
-            <motion.tr
-              key={affiliation.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: index * 0.1 }}
-              onClick={() => router.push(`/affiliations/${affiliation.id}`)}
-              className="cursor-pointer hover:bg-gray-50"
-            >
-              <td className="px-6 py-4 whitespace-nowrap">
-                <div className="text-sm font-medium text-gray-900">
-                  {affiliation.firstName} {affiliation.lastName}
-                </div>
-                <div className="text-sm text-gray-500">ID: {affiliation.id}</div>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {affiliation.linkName}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                {affiliation.totalReferrals}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                ${affiliation.revenue.toLocaleString()}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                  affiliation.status === 'active' 
-                    ? 'bg-green-100 text-green-800' 
-                    : 'bg-red-100 text-red-800'
-                }`}>
-                  {affiliation.status}
-                </span>
-              </td>
-            </motion.tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="bg-white rounded-lg shadow-lg overflow-hidden"
+    >
+      <div className="overflow-x-auto">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Affiliate
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Contact
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Social Media
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Tier
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Joined
+              </th>
+              <th className="relative px-6 py-3">
+                <span className="sr-only">View</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {affiliates.map((affiliate, index) => (
+              <motion.tr
+                key={affiliate.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
+                onClick={() => router.push(`/affiliations/${affiliate.id}`)}
+                className="hover:bg-gray-50 cursor-pointer group"
+              >
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="flex items-center">
+                    <div className="h-10 w-10 flex-shrink-0">
+                      <div className="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center">
+                        <span className="text-primary-600 font-medium">
+                          {affiliate.first_name[0]}{affiliate.last_name[0]}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="ml-4">
+                      <div className="text-sm font-medium text-gray-900">
+                        {affiliate.first_name} {affiliate.last_name}
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        {affiliate.alias}
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="flex flex-col space-y-1">
+                    <div className="flex items-center text-sm text-gray-500">
+                      <Mail className="h-4 w-4 mr-2" />
+                      {affiliate.email}
+                    </div>
+                    <div className="flex items-center text-sm text-gray-500">
+                      <Phone className="h-4 w-4 mr-2" />
+                      {affiliate.phone_number}
+                    </div>
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="flex space-x-3">
+                    {affiliate.instagram && (
+                      <a
+                        href={affiliate.instagram}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-pink-600 hover:text-pink-700"
+                      >
+                        <Instagram className="h-5 w-5" />
+                      </a>
+                    )}
+                    {affiliate.facebook && (
+                      <a
+                        href={affiliate.facebook}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-blue-600 hover:text-blue-700"
+                      >
+                        <Facebook className="h-5 w-5" />
+                      </a>
+                    )}
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getTierColor(affiliate.tier)}`}>
+                    <Award className="h-4 w-4 mr-1" />
+                    {affiliate.tier}
+                  </span>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {new Date(affiliate.created_at).toLocaleDateString()}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <ExternalLink className="h-5 w-5 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </td>
+              </motion.tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </motion.div>
   );
 }
