@@ -4,8 +4,9 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { UserDetail } from "@/types/userDetail";
 import { Clock, Users, DollarSign, Calendar } from "lucide-react";
+import {UserUsage} from "@/types/userUsage";
 
-export default function UserStats({ user }: { user: UserDetail }) {
+export default function UserStats({ user }: { user: UserUsage }) {
     const [daysActive, setDaysActive] = useState<number>(0);
 
     useEffect(() => {
@@ -33,8 +34,8 @@ export default function UserStats({ user }: { user: UserDetail }) {
             bgColor: "bg-green-100",
         },
         {
-            label: "Total Revenue",
-            value: "---",
+            label: "Estimated Revenue (₪)",
+            value: user.total_revenue,
             icon: DollarSign,
             color: "text-yellow-500",
             bgColor: "bg-yellow-100",
