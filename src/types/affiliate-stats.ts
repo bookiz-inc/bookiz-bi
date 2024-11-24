@@ -1,6 +1,7 @@
 import type { Affiliation } from './affiliation';
 
 export interface ReferredTransaction {
+  user_id: number;
   business: string;
   created_at: string;
   business_id: string;
