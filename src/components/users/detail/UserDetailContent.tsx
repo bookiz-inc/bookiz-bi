@@ -115,7 +115,7 @@ export default function UserDetailContent({ userId }: { userId: string }) {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2 space-y-6">
                     <BusinessInfo business={user.business} />
-                    <UserActivity user={user} />
+                    <UserActivity userId={userId} />
                 </div>
                 <div className="lg:col-span-1">
                 {usage && <UserStats user={usage} />}
