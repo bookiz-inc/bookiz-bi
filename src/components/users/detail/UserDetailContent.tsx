@@ -10,6 +10,7 @@ import UserMetrics from "./UserMetrics"; // Add this import
 import { UserDetail } from "@/types/userDetail";
 import { UserUsage } from "@/types/userUsage"; // Add this import
 import { AlertCircle } from "lucide-react";
+import UserAffiliation from "./UserAffiliation";
 
 export default function UserDetailContent({ userId }: { userId: string }) {
     const [user, setUser] = useState<UserDetail | null>(null);
@@ -115,7 +116,9 @@ export default function UserDetailContent({ userId }: { userId: string }) {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2 space-y-6">
                     <BusinessInfo business={user.business} />
+                    <UserAffiliation userId={userId} />
                     <UserActivity userId={userId} />
+                    
                 </div>
                 <div className="lg:col-span-1">
                 {usage && <UserStats user={usage} />}
