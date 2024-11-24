@@ -37,7 +37,7 @@ export default function AffiliateDetail({ stats }: AffiliateDetailProps) {
 
   // Calculate estimated value (example calculation)
   const estimatedValue = referred_transaction.reduce((total, transaction) => {
-    const baseValue = transaction.wanted_plan === 'monthly' ? 100 : 1000;
+    const baseValue = transaction.wanted_plan === 'monthly' ? 139 : 828;
     return total + (transaction.is_payment_verified ? baseValue : 0);
   }, 0);
 
@@ -48,12 +48,12 @@ export default function AffiliateDetail({ stats }: AffiliateDetailProps) {
     
     if (existingDay) {
       existingDay.referrals += 1;
-      existingDay.value += transaction.wanted_plan === 'monthly' ? 100 : 1000;
+      existingDay.value += transaction.wanted_plan === 'monthly' ? 139 : 828;
     } else {
       acc.push({
         date,
         referrals: 1,
-        value: transaction.wanted_plan === 'monthly' ? 100 : 1000
+        value: transaction.wanted_plan === 'monthly' ? 139 : 828
       });
     }
     return acc;
@@ -176,7 +176,7 @@ export default function AffiliateDetail({ stats }: AffiliateDetailProps) {
             <DollarSign className="h-8 w-8 text-green-600" />
             <div className="ml-4">
               <p className="text-sm text-gray-500">Estimated Value</p>
-              <p className="text-2xl font-bold text-gray-900">${estimatedValue}</p>
+              <p className="text-2xl font-bold text-gray-900">₪{estimatedValue}</p>
             </div>
           </div>
         </div>
@@ -296,7 +296,7 @@ export default function AffiliateDetail({ stats }: AffiliateDetailProps) {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">
-                      ${transaction.wanted_plan === 'monthly' ? '100' : '1,000'}
+                        ₪{transaction.wanted_plan === 'monthly' ? '139' : '828'}
                     </div>
                   </td>
                 </motion.tr>
