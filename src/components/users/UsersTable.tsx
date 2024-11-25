@@ -36,9 +36,9 @@ export default function UsersTable({ users, searchQuery }: UsersTableProps) {
 
   const getSubscriptionBadgeColor = (plan: string) => {
     switch (plan) {
-      case 'Beta':
+      case 'monthly':
         return 'bg-purple-100 text-purple-800';
-      case 'Premium':
+      case 'annual':
         return 'bg-yellow-100 text-yellow-800';
       default:
         return 'bg-gray-100 text-gray-800';
