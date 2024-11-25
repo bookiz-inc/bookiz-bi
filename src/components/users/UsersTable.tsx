@@ -3,11 +3,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { 
-  Mail, 
-  Phone, 
-  Calendar, 
-  Building2, 
+import {
+  Mail,
+  Phone,
+  Calendar,
+  Building2,
   Crown,
   CheckCircle2,
   XCircle,
@@ -108,10 +108,10 @@ export default function UsersTable({ users, searchQuery }: UsersTableProps) {
                     </div>
                     <div className="flex items-center mt-1">
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        getSubscriptionBadgeColor(user.business.subscription_plan)
+                        getSubscriptionBadgeColor(user.business.wanted_plan || user.business.subscription_plan)
                       }`}>
                         <Crown className="w-3 h-3 mr-1" />
-                        {user.business.subscription_plan}
+                        {user.business.wanted_plan || user.business.subscription_plan}
                       </span>
                       {user.business.pre_launch_user && (
                         <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">

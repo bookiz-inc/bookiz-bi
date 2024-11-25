@@ -41,7 +41,7 @@ export default function BusinessInfo({ business }: { business: BusinessDetail })
                             <div className="flex items-center mt-1">
                                 <Crown className="h-4 w-4 text-yellow-400 mr-1" />
                                 <p className="text-sm font-medium text-gray-900">
-                                    {business.subscription_plan}
+                                    {business.wanted_plan}
                                 </p>
                             </div>
                         </div>
