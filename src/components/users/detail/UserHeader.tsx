@@ -9,6 +9,7 @@ import {
     Shield,
     RefreshCw,
     MessageCircle,
+    LinkIcon
 } from "lucide-react";
 import { UserDetail } from "@/types/userDetail";
 import { useRouter } from "next/navigation";
@@ -115,11 +116,19 @@ export default function UserHeader({ user, onRefresh, isRefreshing = false }: Us
 
                     {/* Action Buttons */}
                     <div className="flex flex-wrap gap-3">
+                        <a
+                            target="_blank"
+                            href={`https://app.bookiz.co.il/b/${user.business.id}`}
+                            className="inline-flex items-center bg-primary-600 px-4 py-2 border border-primary-700 rounded-md shadow-sm text-sm font-medium hover:text-primary-600 hover:bg-primary-50  transition-colors"
+                        >
+                            <LinkIcon className="h-4 w-4 mr-2"/>
+                            דף עסק
+                        </a>
                         <button
                             onClick={handleWhatsAppClick}
                             className="inline-flex items-center px-4 py-2 border border-green-500 rounded-md shadow-sm text-sm font-medium text-green-600 bg-white hover:bg-green-50 transition-colors"
                         >
-                            <MessageCircle className="h-4 w-4 mr-2" />
+                            <MessageCircle className="h-4 w-4 mr-2"/>
                             WhatsApp
                         </button>
 
@@ -127,7 +136,7 @@ export default function UserHeader({ user, onRefresh, isRefreshing = false }: Us
                             onClick={handleEmailClick}
                             className="inline-flex items-center px-4 py-2 border border-blue-500 rounded-md shadow-sm text-sm font-medium text-blue-600 bg-white hover:bg-blue-50 transition-colors"
                         >
-                            <Mail className="h-4 w-4 mr-2" />
+                            <Mail className="h-4 w-4 mr-2"/>
                             Email
                         </button>
 
@@ -135,7 +144,7 @@ export default function UserHeader({ user, onRefresh, isRefreshing = false }: Us
                             href={`tel:${user.phone_number}`}
                             className="inline-flex items-center px-4 py-2 border border-primary-500 rounded-md shadow-sm text-sm font-medium text-primary-600 bg-white hover:bg-primary-50 transition-colors"
                         >
-                            <Phone className="h-4 w-4 mr-2" />
+                            <Phone className="h-4 w-4 mr-2"/>
                             Call
                         </a>
                     </div>
@@ -143,7 +152,7 @@ export default function UserHeader({ user, onRefresh, isRefreshing = false }: Us
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
                     <div className="flex items-center">
-                        <Mail className="h-5 w-5 text-gray-400 mr-2" />
+                        <Mail className="h-5 w-5 text-gray-400 mr-2"/>
                         <div dir="rtl">
                             <p className="text-sm text-gray-500">Email</p>
                             <p className="text-sm font-medium text-gray-900">{user.email}</p>
