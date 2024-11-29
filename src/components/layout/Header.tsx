@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Bell, Search, ChevronDown, Settings, LogOut, ExternalLink } from "lucide-react";
+import { Bell, Search, ChevronDown, Settings, LogOut, File } from "lucide-react";
 import { UserButton, useUser, useClerk } from "@clerk/nextjs";
 import Image from 'next/image';
 
@@ -29,10 +29,23 @@ export default function Header() {
               />
             </div>
           </div>
+          <a
+            href="/affiliate-signup"
+            className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-50 transition-colors"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <File className="h-5 w-5 text-gray-500" />
+            <span className="hidden sm:inline text-sm font-medium text-gray-700">
+              Affiliate Signup
+            </span>
+          </a>
         </div>
 
         {/* Right section */}
         <div className="flex items-center gap-4">
+         
+
           {/* Bookiz App Link */}
           <a
             href="https://app.bookiz.co.il"
