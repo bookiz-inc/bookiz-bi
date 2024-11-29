@@ -115,6 +115,8 @@ export function AffiliateSignupForm() {
                 onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
                 className="text-black block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
                 required
+                autoComplete="given-name"
+                name="first_name"
               />
               <User2 className="absolute left-3 top-2.5 h-5 w-5 text-black" />
             </div>
@@ -129,6 +131,8 @@ export function AffiliateSignupForm() {
                 onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
                 className="text-black block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
                 required
+                autoComplete="family-name"
+                name="last_name"
               />
               <User2 className="absolute left-3 top-2.5 h-5 w-5 text-black" />
             </div>
@@ -173,6 +177,8 @@ export function AffiliateSignupForm() {
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 className="text-black block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
                 required
+                autoComplete="email"
+                name="email"
               />
               <Mail className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
             </div>
@@ -187,6 +193,8 @@ export function AffiliateSignupForm() {
                 onChange={(e) => setFormData({ ...formData, phone_number: e.target.value })}
                 className="text-black block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
                 required
+                autoComplete="tel"
+                name="phone_number"
               />
               <Phone className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
             </div>
@@ -217,6 +225,8 @@ export function AffiliateSignupForm() {
                 onChange={(e) => setFormData({ ...formData, tax_id: e.target.value })}
                 className="text-black block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
                 required
+                autoComplete="organization"
+                name="tax_id"
               />
               <Building2 className="absolute left-3 top-2.5 h-5 w-5 text-black" />
             </div>
@@ -232,6 +242,8 @@ export function AffiliateSignupForm() {
                 onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                 className="text-black block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
                 required
+                autoComplete="street-address"
+                name="address"
               />
               <MapPin className="absolute left-3 top-2.5 h-5 w-5 text-black" />
             </div>
@@ -246,6 +258,8 @@ export function AffiliateSignupForm() {
                 onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                 className="text-black block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
                 required
+                autoComplete="address-level2"
+                name="city"
               />
               <MapPin className="absolute left-3 top-2.5 h-5 w-5 text-black" />
             </div>
