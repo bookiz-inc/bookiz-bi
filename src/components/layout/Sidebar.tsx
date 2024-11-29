@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useUser, useClerk } from "@clerk/nextjs";
 import { useState } from "react";
 import Image from 'next/image';
+import { InstallButton } from '@/components/pwa/InstallButton';
 import {
   LayoutDashboard,
   Users,
@@ -211,6 +212,7 @@ export default function Sidebar() {
 
           {/* Mobile user profile */}
           <div className="border-t border-gray-200 p-4">
+            <InstallButton />
             <div className="flex items-center">
               <div className="h-8 w-8 rounded-full bg-primary-200 overflow-hidden">
                 {user?.imageUrl && (
