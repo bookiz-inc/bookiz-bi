@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { useUser, useClerk } from "@clerk/nextjs";
 import { useState } from "react";
 import Image from 'next/image';
-import { InstallButton } from '@/components/pwa/InstallButton';
 import {
   LayoutDashboard,
   Users,
@@ -67,15 +66,15 @@ export default function Sidebar() {
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
 
   const toggleExpanded = (itemName: string) => {
-    setExpandedItems(prev => 
-      prev.includes(itemName) 
+    setExpandedItems(prev =>
+      prev.includes(itemName)
         ? prev.filter(item => item !== itemName)
         : [...prev, itemName]
     );
   };
 
   const renderNavItem = (item: any, isMobile: boolean = false) => {
-    const isActive = pathname === item.href || 
+    const isActive = pathname === item.href ||
                     (item.subItems?.some((subItem: any) => pathname === subItem.href));
     const isExpanded = expandedItems.includes(item.name);
     const hasSubItems = item.subItems && item.subItems.length > 0;
@@ -212,7 +211,6 @@ export default function Sidebar() {
 
           {/* Mobile user profile */}
           <div className="border-t border-gray-200 p-4">
-            <InstallButton />
             <div className="flex items-center">
               <div className="h-8 w-8 rounded-full bg-primary-200 overflow-hidden">
                 {user?.imageUrl && (
@@ -263,6 +261,7 @@ export default function Sidebar() {
 
           {/* Desktop user profile */}
           <div className="flex-shrink-0 border-t border-gray-200">
+
             <div className="flex items-center p-4">
               <div className="h-8 w-8 rounded-full bg-primary-200 overflow-hidden">
                 {user?.imageUrl && (
