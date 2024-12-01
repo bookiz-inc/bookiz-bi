@@ -11,6 +11,15 @@ export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [filters, setFilters] = useState<FilterOptions>({
+    status: '',
+    subscriptionPlan: '',
+    hasAffiliation: '',
+  });
+  const [sort, setSort] = useState<SortOptions>({
+    field: 'date_joined',
+    direction: 'desc',
+  });
 
   useEffect(() => {
     fetchUsers();
@@ -68,7 +77,7 @@ export default function UsersPage() {
         <h1 className="text-3xl font-bold text-gray-900">Users</h1>
       </div>
 
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-4">
         <div className="flex w-full max-w-lg">
           <div className="relative w-full">
             <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
@@ -86,10 +95,18 @@ export default function UsersPage() {
           </div>
         </div>
 
-        <UserFilters />
+        <UserFilters 
+          onFilterChange={setFilters}
+          onSortChange={setSort}
+        />
       </div>
 
-      <UsersTable users={users} searchQuery={searchQuery} />
+      <UsersTable 
+        users={users} 
+        searchQuery={searchQuery}
+        filters={filters}
+        sort={sort}
+      />
     </div>
   );
 }

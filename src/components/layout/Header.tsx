@@ -29,17 +29,7 @@ export default function Header() {
               />
             </div>
           </div>
-          <a
-            href="/affiliate-signup"
-            className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-50 transition-colors"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <File className="h-5 w-5 text-gray-500" />
-            <span className="hidden sm:inline text-sm font-medium text-gray-700">
-              Affiliate Signup
-            </span>
-          </a>
+          
         </div>
 
         {/* Right section */}

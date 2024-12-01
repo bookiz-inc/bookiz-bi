@@ -13,7 +13,9 @@ import {
   CheckCircle,
   XCircle,
   DollarSign,
-  TrendingUp
+  TrendingUp,
+  Link,
+  Copy
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import ReferredBusinessesTable from './ReferredBusinessesTable';
@@ -28,6 +30,7 @@ import {
   ResponsiveContainer
 } from 'recharts';
 import type { AffiliateStats } from '@/types/affiliate-stats';
+import toast from 'react-hot-toast';
 
 interface AffiliateDetailProps {
   stats: AffiliateStats;
@@ -189,9 +192,35 @@ export default function AffiliateDetail({ stats }: AffiliateDetailProps) {
             <div className="ml-4">
               <p className="text-sm text-gray-500">Conversion Rate</p>
               <p className="text-2xl font-bold text-gray-900">
-                {Math.round((referred_transaction.filter(t => t.is_payment_verified).length / referred_businesses_count) * 100)}%
+                {stats.link_data.clicks > 0 
+                  ? Math.round((referred_transaction.length / stats.link_data.clicks) * 100)
+                  : 0}%
               </p>
             </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow p-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <Link className="h-8 w-8 text-purple-600" />
+              <div className="ml-4">
+                <p className="text-sm text-gray-500">Link Clicks</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.link_data.clicks}</p>
+              </div>
+            </div>
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(stats.link_data.link);
+                toast.success('Link copied to clipboard!', {
+                  position: 'bottom-center',
+                  duration: 2000
+                });
+              }}
+              className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              <Copy className="h-5 w-5" />
+            </button>
           </div>
         </div>
       </motion.div>

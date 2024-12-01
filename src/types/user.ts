@@ -6,6 +6,7 @@ export interface Business {
   is_payment_verified: boolean;
   trial_days: number;
   wanted_plan: string | null;
+  future_appointments: number;
 }
 
 export interface User {

@@ -15,7 +15,8 @@ import {
   X,
   Link as LinkIcon,
   ChevronDown,
-  ChevronRight
+  ChevronRight,
+  File
 } from "lucide-react";
 
 const navigation = [
@@ -43,6 +44,11 @@ const navigation = [
         name: "All Affiliates",
         href: "/affiliations",
         icon: Users,
+      },
+      {
+        name: "Affiliate Signup",
+        href: "/affiliate-signup",
+        icon: File,
       }
     ]
   },
