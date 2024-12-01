@@ -38,9 +38,9 @@ export default function UserFilters({ onFilterChange, onSortChange }: UserFilter
   };
 
   const handleSortChange = (field: string) => {
-    const newSort = {
+    const newSort: SortOptions = {
       field,
-      direction: sort.field === field && sort.direction === 'asc' ? 'desc' : 'asc',
+      direction: sort.field === field && sort.direction === 'asc' ? 'desc' : 'asc'
     };
     setSort(newSort);
     onSortChange(newSort);

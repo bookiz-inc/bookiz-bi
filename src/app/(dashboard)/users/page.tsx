@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Search } from "lucide-react";
 import UsersTable from "@/components/users/UsersTable";
-import UserFilters from "@/components/users/UserFilters";
+import UserFilters, {FilterOptions, SortOptions} from "@/components/users/UserFilters";
 import type { User } from "@/types/user";
 
 export default function UsersPage() {
@@ -95,14 +95,14 @@ export default function UsersPage() {
           </div>
         </div>
 
-        <UserFilters 
+        <UserFilters
           onFilterChange={setFilters}
           onSortChange={setSort}
         />
       </div>
 
-      <UsersTable 
-        users={users} 
+      <UsersTable
+        users={users}
         searchQuery={searchQuery}
         filters={filters}
         sort={sort}

@@ -44,10 +44,10 @@ export default function UsersTable({ users, searchQuery, filters, sort }: UsersT
       const matchesPlan = !filters.subscriptionPlan || 
         user.business?.wanted_plan === filters.subscriptionPlan;
 
-      const matchesAffiliation = !filters.hasAffiliation || 
-        (filters.hasAffiliation === 'true' ? user.business?.from_affiliate : !user.business?.from_affiliate);
+      // const matchesAffiliation = !filters.hasAffiliation || 
+      //   (filters.hasAffiliation === 'true' ? user.business?.from_affiliate : !user.business?.from_affiliate);
 
-      return matchesSearch && matchesStatus && matchesPlan && matchesAffiliation;
+      return matchesSearch && matchesStatus && matchesPlan ;
     })
     .sort((a, b) => {
       const direction = sort.direction === 'asc' ? 1 : -1;
