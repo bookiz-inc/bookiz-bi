@@ -20,7 +20,7 @@ export default function SuccessPage() {
         origin: { x: 0 },
         colors: ['#6366f1', '#8b5cf6', '#d946ef']
       });
-      
+
       confetti({
         particleCount: 2,
         angle: 120,
@@ -38,7 +38,7 @@ export default function SuccessPage() {
 
     // Redirect after 5 seconds
     const timer = setTimeout(() => {
-      window.location.href = 'https://app.bookiz.co.il';
+      window.location.href = 'https://app.bookiz.co.il/affiliate';
     }, 5000);
 
     return () => clearTimeout(timer);
@@ -92,4 +92,4 @@ export default function SuccessPage() {
       </motion.div>
     </div>
   );
-} 
+}
