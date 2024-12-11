@@ -18,7 +18,8 @@ import {
     ChevronRight,
     File,
     CreditCard,
-    Table
+    Table,
+    Clock
 } from "lucide-react";
 
 const navigation = [
@@ -37,7 +38,8 @@ const navigation = [
         icon: CreditCard,
         subItems: [
             {name: "Dashboard", href: "/subscriptions/dashboard" , icon: BarChart3},
-            {name: "Plans Manager", href: "/subscriptions/plans" , icon: Table}
+            {name: "Plans Manager", href: "/subscriptions/plans" , icon: Table},
+            {name: "Trial Expirations", href: "/subscriptions/trials", icon: Clock}
         ]
     },
     {
