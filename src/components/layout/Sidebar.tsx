@@ -61,6 +61,11 @@ const navigation = [
                 name: "Affiliate Signup",
                 href: "/affiliate-signup",
                 icon: File,
+            },
+            {
+                name: "Noga's Signup Page",
+                href: "/affiliate-signup/noga",
+                icon: File,
             }
         ]
     },
