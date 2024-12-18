@@ -25,7 +25,7 @@ export default function DeleteUserButton({ userId, className }: DeleteUserButton
         try {
             setIsLoading(true);
             const response = await fetch(
-                `http://localhost:8000/api/v1/auth/users/delete/?user_id=${userId}`, 
+                `https://api.bookiz.co.il/api/v1/auth/users/delete/?user_id=${userId}`,
                 {
                     method: 'DELETE',
                     headers: {
@@ -63,4 +63,4 @@ export default function DeleteUserButton({ userId, className }: DeleteUserButton
             </span>
         </motion.button>
     );
-} 
+}
