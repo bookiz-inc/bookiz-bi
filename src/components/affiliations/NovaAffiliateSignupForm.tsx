@@ -19,6 +19,7 @@ interface FormData {
   instagram: string;
   facebook: string;
   tier: 'SILVER';
+  from_noga: boolean;
 }
 
 const businessCategories = [
@@ -47,7 +48,8 @@ export function NovaAffiliateSignupForm() {
     phone_number: '',
     instagram: '',
     facebook: '',
-    tier: 'SILVER'
+    tier: 'SILVER',
+    from_noga: true
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
