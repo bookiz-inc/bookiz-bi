@@ -8,11 +8,23 @@ import { WelcomeMemojiGroup } from './WelcomeMemojiGroup';
 
 interface WelcomeStepProps {
   onContinue: () => void;
+  welcomeTitle?: string;
+  welcomeDescription?: string;
+  avatarSrc?: string;
+  avatarAlt?: string;
+  showLogo?: boolean;
 }
 
-export function WelcomeStep({ onContinue }: WelcomeStepProps) {
+export function WelcomeStep({ 
+  onContinue, 
+  welcomeTitle = "ברוך הבא משפיען חדש!",
+  welcomeDescription = "אנחנו שמחים שבחרת להצטרף למשפחת בוקיז. בוא נתחיל בתהליך ההרשמה",
+  avatarSrc,
+  avatarAlt = "Profile Picture",
+  showLogo = true
+}: WelcomeStepProps) {
   useEffect(() => {
-    // Initial confetti burst
+    // Confetti effect code remains the same
     const duration = 2000;
     const end = Date.now() + duration;
 
@@ -56,14 +68,38 @@ export function WelcomeStep({ onContinue }: WelcomeStepProps) {
         }}
         className="mb-8 relative"
       >
-        <Image
-          src="/images/bookiz-purple.png"
-          alt="Bookiz Logo"
-          width={200}
-          height={200}
-          className="w-32 h-32 md:w-48 md:h-48 mx-auto"
-          priority
-        />
+        {avatarSrc ? (
+          <div className="relative">
+            <Image
+              src={avatarSrc}
+              alt={avatarAlt}
+              width={200}
+              height={200}
+              className="w-32 h-32 md:w-48 md:h-48 mx-auto rounded-full object-cover border-4 border-white shadow-xl"
+              priority
+            />
+            {showLogo && (
+              <div className="absolute -bottom-4 -right-4">
+                <Image
+                  src="/images/bookiz-purple.png"
+                  alt="Bookiz Logo"
+                  width={60}
+                  height={60}
+                  className="w-12 h-12 md:w-16 md:h-16"
+                />
+              </div>
+            )}
+          </div>
+        ) : showLogo && (
+          <Image
+            src="/images/bookiz-purple.png"
+            alt="Bookiz Logo"
+            width={200}
+            height={200}
+            className="w-32 h-32 md:w-48 md:h-48 mx-auto"
+            priority
+          />
+        )}
       </motion.div>
 
       <WelcomeMemojiGroup />
@@ -77,23 +113,8 @@ export function WelcomeStep({ onContinue }: WelcomeStepProps) {
         <motion.h1 
           className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight" 
           dir="rtl"
-        >
-          <motion.span
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
-          >
-            ברוך הבא
-          </motion.span>{" "}
-          <motion.span
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.9 }}
-            className="text-primary-600"
-          >
-            משפיען חדש!
-          </motion.span>
-        </motion.h1>
+          dangerouslySetInnerHTML={{ __html: welcomeTitle }}
+        />
         
         <motion.p 
           initial={{ opacity: 0 }}
@@ -102,7 +123,7 @@ export function WelcomeStep({ onContinue }: WelcomeStepProps) {
           className="text-lg md:text-xl text-gray-600 px-4" 
           dir="rtl"
         >
-          אנחנו שמחים שבחרת להצטרף למשפחת בוקיז. בוא נתחיל בתהליך ההרשמה
+          {welcomeDescription}
         </motion.p>
 
         <motion.button
