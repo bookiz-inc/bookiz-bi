@@ -1,13 +1,12 @@
 'use client';
+
 import { useState } from 'react';
 import { NovaAffiliateSignupForm } from '@/components/affiliations/NovaAffiliateSignupForm';
 import { AnimatePresence, motion } from 'framer-motion';
 import { WelcomeStep } from '@/components/affiliations/WelcomeStep';
 
 export default function NovaAffiliateSignupPage() {
-
   const [showForm, setShowForm] = useState(false);
-
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 to-purple-50">
