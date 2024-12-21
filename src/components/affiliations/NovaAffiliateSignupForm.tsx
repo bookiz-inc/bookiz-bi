@@ -19,7 +19,7 @@ interface FormData {
   instagram: string;
   facebook: string;
   tier: 'SILVER';
-  from_noga: boolean;
+  from_noga: true;
 }
 
 const businessCategories = [
