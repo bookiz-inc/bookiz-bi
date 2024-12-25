@@ -6,23 +6,50 @@ import UserHeader from "./UserHeader";
 import BusinessInfo from "./BusinessInfo";
 import UserStats from "./UserStats";
 import UserActivity from "./UserActivity";
-import UserMetrics from "./UserMetrics"; // Add this import
+import UserMetrics from "./UserMetrics";
 import { UserDetail } from "@/types/userDetail";
-import { UserUsage } from "@/types/userUsage"; // Add this import
+import { UserUsage } from "@/types/userUsage";
 import { AlertCircle } from "lucide-react";
 import UserAffiliation from "./UserAffiliation";
+import UserSubscription from './UserSubscription';
+import ExtendTrialModal from './ExtendTrialModal';
+
+interface SubscriptionInfo {
+    id: string;
+    status: string;
+    start_date: string;
+    end_date: string;
+    trial_end_date: string;
+    next_payment_date: string;
+    plan_name: string;
+    plan_price: string;
+    billing_cycle: string;
+    payment_tokens: Array<{
+        last_4_digits: string;
+        card_brand: string;
+        expiry_month: number;
+        expiry_year: number;
+        is_default: boolean;
+    }>;
+    business_id: string;
+    user_id: number;
+    days_left_for_trial: number;
+    plan_id: number;
+}
 
 export default function UserDetailContent({ userId }: { userId: string }) {
     const [user, setUser] = useState<UserDetail | null>(null);
-    const [usage, setUsage] = useState<UserUsage | null>(null); // Add this state
+    const [usage, setUsage] = useState<UserUsage | null>(null);
+    const [subscription, setSubscription] = useState<SubscriptionInfo | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [isExtendTrialModalOpen, setIsExtendTrialModalOpen] = useState(false);
 
     const fetchData = async () => {
         try {
             setError(null);
-            const [userResponse, usageResponse] = await Promise.all([
+            const [userResponse, usageResponse, subscriptionResponse] = await Promise.all([
                 fetch(
                     `https://api.bookiz.co.il/api/v1/data/analytics/users/${userId}`,
                     {
@@ -40,20 +67,31 @@ export default function UserDetailContent({ userId }: { userId: string }) {
                             "X-CSRFToken": "7QFk3qgsriFFp25wha1uIIVeVSD2CiOKglILmxLgTKeRNBY4H8NogqC6xQJA0pdZ",
                         },
                     }
+                ),
+                fetch(
+                    `http://localhost:8000/api/v1/subscriptions/user/${userId}/`,
+                    {
+                        headers: {
+                            accept: "application/json",
+                            "X-CSRFToken": "UVRHSrP7XtqtBtddEzh1eyVebVZPZMJJz0siebndgXQW6pxu19R2bubOvqYTrs8X",
+                        },
+                    }
                 )
             ]);
 
-            if (!userResponse.ok || !usageResponse.ok) {
+            if (!userResponse.ok || !usageResponse.ok || !subscriptionResponse.ok) {
                 throw new Error("Failed to fetch user data");
             }
 
-            const [userData, usageData] = await Promise.all([
+            const [userData, usageData, subscriptionData] = await Promise.all([
                 userResponse.json(),
-                usageResponse.json()
+                usageResponse.json(),
+                subscriptionResponse.json()
             ]);
 
             setUser(userData);
             setUsage(usageData);
+            setSubscription(subscriptionData);
         } catch (err) {
             setError(err instanceof Error ? err.message : "Failed to fetch user details");
         } finally {
@@ -113,17 +151,30 @@ export default function UserDetailContent({ userId }: { userId: string }) {
 
             {usage && <UserMetrics usage={usage} />}
 
+            <UserSubscription 
+                userId={userId} 
+                onExtendTrial={() => setIsExtendTrialModalOpen(true)}
+            />
+
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2 space-y-6">
                     <BusinessInfo business={user.business} />
                     <UserAffiliation userId={userId} />
                     <UserActivity userId={userId} />
-                    
                 </div>
                 <div className="lg:col-span-1">
-                {usage && <UserStats user={usage} />}
+                    {usage && <UserStats user={usage} />}
                 </div>
             </div>
+
+            {subscription?.status === 'TRIAL' && (
+                <ExtendTrialModal
+                    isOpen={isExtendTrialModalOpen}
+                    onClose={() => setIsExtendTrialModalOpen(false)}
+                    userId={userId}
+                    currentTrialDays={subscription.days_left_for_trial}
+                />
+            )}
         </motion.div>
     );
 }
