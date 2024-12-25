@@ -6,6 +6,8 @@ import { RefreshCw, AlertCircle } from 'lucide-react';
 import type { UpcomingTrials } from '@/types/subscriptionTrials';
 import TrialExpirationSection from '@/components/subscriptions/trials/TrialExpirationSection';
 
+const API_URL = 'https://api.bookiz.co.il/api/v1/subscriptions/trials/upcoming/'
+
 export default function TrialsPage() {
   const [data, setData] = useState<UpcomingTrials | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -15,7 +17,7 @@ export default function TrialsPage() {
   const fetchTrials = async () => {
     try {
       setIsRefreshing(true);
-      const response = await fetch('https://api.bookiz.co.il/api/v1/subscriptions/trials/upcoming/', {
+      const response = await fetch(API_URL, {
         headers: {
           'accept': 'application/json',
           'X-CSRFToken': 'NMQbDUuz0tAvYnlmykOKqFZsHECmkQH9KRZWQipBsA3NdBs4X67IQoanG3y2fmcU'
@@ -43,7 +45,10 @@ export default function TrialsPage() {
   if (isLoading) {
     return (
       <div className="min-h-[400px] flex items-center justify-center">
-        <RefreshCw className="h-8 w-8 text-primary-600 animate-spin" />
+        <div className="flex flex-col items-center space-y-4">
+          <RefreshCw className="h-8 w-8 text-primary-600 animate-spin" />
+          <p className="text-sm text-gray-500">Loading trial data...</p>
+        </div>
       </div>
     );
   }
@@ -67,17 +72,19 @@ export default function TrialsPage() {
 
   if (!data) return null;
 
+  const totalTrials = data.next_24_hours.length + data.next_48_hours.length + data.next_week.length;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="space-y-6"
+      className="space-y-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
     >
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-semibold text-gray-900">Upcoming Trial Expirations</h1>
           <p className="mt-1 text-sm text-gray-500">
-            Monitor upcoming trial expirations and take action
+            {totalTrials} {totalTrials === 1 ? 'trial' : 'trials'} expiring soon
           </p>
         </div>
         <button
@@ -92,17 +99,17 @@ export default function TrialsPage() {
 
       <div className="space-y-6">
         <TrialExpirationSection
-          title="Next 24 Hours"
+          title="Expiring in 24 Hours"
           trials={data.next_24_hours}
           urgency="high"
         />
         <TrialExpirationSection
-          title="Next 48 Hours"
+          title="Expiring in 48 Hours"
           trials={data.next_48_hours}
           urgency="medium"
         />
         <TrialExpirationSection
-          title="Next Week"
+          title="Expiring Next Week"
           trials={data.next_week}
           urgency="low"
         />

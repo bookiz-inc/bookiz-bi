@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Clock, User, Crown, Calendar, AlertCircle } from 'lucide-react';
+import { Clock, User, Crown, Calendar, AlertCircle, Phone, CreditCard, Building2 } from 'lucide-react';
 import type { TrialSubscription } from '@/types/subscriptionTrials';
 
 interface TrialExpirationSectionProps {
@@ -41,6 +41,10 @@ export default function TrialExpirationSection({
     });
   };
 
+  const formatPhoneNumber = (phone: string) => {
+    return phone.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+  };
+
   if (trials.length === 0) {
     return (
       <div className={`rounded-lg border p-6 ${getUrgencyStyles(urgency)}`}>
@@ -66,58 +70,79 @@ export default function TrialExpirationSection({
             onClick={() => router.push(`/users/${trial.user_id}`)}
             className="bg-white rounded-lg shadow-sm p-4 hover:shadow-md transition-shadow cursor-pointer"
           >
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {/* User and Plan Info */}
-              <div className="flex items-start space-x-3">
-                <div className="flex-shrink-0">
-                  <User className="h-5 w-5 text-gray-400" />
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              {/* Business and User Info */}
+              <div className="space-y-3">
+                <div className="flex items-start space-x-3">
+                  <div className="flex-shrink-0">
+                    <Building2 className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">
+                      {trial.business_name}
+                    </p>
+                    <div className="flex items-center mt-1">
+                      <Crown className="h-4 w-4 text-yellow-400 mr-1" />
+                      <p className="text-sm text-gray-500">{trial.plan_name}</p>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-900">
-                    User ID: {trial.user_id}
-                  </p>
-                  <div className="flex items-center mt-1">
-                    <Crown className="h-4 w-4 text-yellow-400 mr-1" />
-                    <p className="text-sm text-gray-500">{trial.plan_name}</p>
+
+                <div className="flex items-center space-x-3">
+                  <Phone className="h-5 w-5 text-gray-400" />
+                  <p className="text-sm text-gray-600">{formatPhoneNumber(trial.user_phone)}</p>
+                </div>
+              </div>
+
+              {/* Trial Info */}
+              <div className="space-y-3">
+                <div className="flex items-start space-x-3">
+                  <Calendar className="h-5 w-5 text-gray-400" />
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">
+                      Trial Ends {trial.days_left_for_trial === 0 ? 'Today' : 
+                        trial.days_left_for_trial < 0 ? 'Expired' : 
+                        `in ${trial.days_left_for_trial} days`}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      {formatDate(trial.trial_end_date)}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-3">
+                  <CreditCard className="h-5 w-5 text-gray-400" />
+                  <div>
+                    <p className="text-sm text-gray-600">
+                      {trial.payment_tokens.length > 0 ? (
+                        <span className="text-green-600">
+                          {trial.payment_tokens[0].card_brand} ending in {trial.payment_tokens[0].last_4_digits}
+                        </span>
+                      ) : (
+                        <span className="text-red-600">No payment method</span>
+                      )}
+                    </p>
                   </div>
                 </div>
               </div>
 
-              {/* Trial Period */}
-              <div className="flex items-start space-x-3">
-                <div className="flex-shrink-0">
-                  <Calendar className="h-5 w-5 text-gray-400" />
+              {/* Price Info */}
+              <div className="flex flex-col justify-between">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-500">Plan Price</span>
+                  <span className="font-medium text-gray-900">₪{trial.plan_price}</span>
                 </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-900">
-                    Trial Ends
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    {formatDate(trial.trial_end_date)}
-                  </p>
+                <div className="flex justify-between items-center mt-2">
+                  <span className="text-sm text-gray-500">Billing</span>
+                  <span className="text-sm font-medium text-gray-900 capitalize">
+                    {trial.billing_cycle.toLowerCase()}
+                  </span>
                 </div>
-              </div>
-
-              {/* Payment Status */}
-              <div className="flex items-start space-x-3">
-                <div className="flex-shrink-0">
-                  <AlertCircle className={`h-5 w-5 ${trial.payment_tokens.length ? 'text-green-500' : 'text-red-500'}`} />
+                <div className={`mt-3 py-2 px-3 rounded-md text-sm ${
+                  trial.payment_tokens.length ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'
+                }`}>
+                  {trial.payment_tokens.length ? 'Ready for Renewal' : 'Action Required'}
                 </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-900">
-                    Payment Method
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    {trial.payment_tokens.length ? 'Added' : 'Not Added'}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-3 pt-3 border-t border-gray-100">
-              <div className="flex justify-between items-center text-sm">
-                <span className="text-gray-500">Plan Price</span>
-                <span className="font-medium text-gray-900">₪{trial.plan_price}</span>
               </div>
             </div>
           </motion.div>
