@@ -69,7 +69,7 @@ export default function UserDetailContent({ userId }: { userId: string }) {
                     }
                 ),
                 fetch(
-                    `http://localhost:8000/api/v1/subscriptions/user/${userId}/`,
+                    `https://api.bookiz.co.il/api/v1/subscriptions/user/${userId}/`,
                     {
                         headers: {
                             accept: "application/json",
