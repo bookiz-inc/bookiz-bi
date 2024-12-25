@@ -19,7 +19,9 @@ import {
     File,
     CreditCard,
     Table,
-    Clock
+    Clock,
+    Megaphone,
+    MessageSquare
 } from "lucide-react";
 
 const navigation = [
@@ -40,6 +42,13 @@ const navigation = [
             {name: "Dashboard", href: "/subscriptions/dashboard" , icon: BarChart3},
             {name: "Plans Manager", href: "/subscriptions/plans" , icon: Table},
             {name: "Trial Expirations", href: "/subscriptions/trials", icon: Clock}
+        ]
+    },
+    {
+        name: "Marketing",
+        icon: Megaphone,
+        subItems: [
+            {name: "Broadcast Messages", href: "/marketing/broadcast", icon: MessageSquare},
         ]
     },
     {
