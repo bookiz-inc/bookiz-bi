@@ -67,7 +67,7 @@ export default function BroadcastPage() {
       }
 
       // Get preview of recipients
-      const previewResponse = await fetch(`${API_URL}/api/v1/notifications/sms/preview-recipients/`, {
+      const previewResponse = await fetch(`${API_URL}/notifications/sms/preview-recipients/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
