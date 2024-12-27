@@ -48,7 +48,7 @@ export default function BroadcastPage() {
 
       // If not in test mode, send the broadcast
       if (!isTest) {
-        const broadcastResponse = await fetch(`${API_URL}/api/v1/notifications/sms/broadcast/`, {
+        const broadcastResponse = await fetch(`${API_URL}/notifications/sms/broadcast/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
