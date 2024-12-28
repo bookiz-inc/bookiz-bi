@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Instagram, Facebook, Award, ExternalLink, Mail, Phone } from 'lucide-react';
+import { Instagram, Facebook, Award, ExternalLink, Mail, Phone, Link2, MousePointerClick } from 'lucide-react';
 import type { Affiliation } from '@/types/affiliation';
 
 interface AffiliatesTableProps {
@@ -18,6 +18,14 @@ export default function AffiliatesTable({ affiliates }: AffiliatesTableProps) {
       case 'GOLD': return 'bg-yellow-100 text-yellow-800';
       case 'SILVER': return 'bg-blue-100 text-blue-800';
       default: return 'bg-orange-100 text-orange-800';
+    }
+  };
+
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
     }
   };
 
@@ -39,6 +47,9 @@ export default function AffiliatesTable({ affiliates }: AffiliatesTableProps) {
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Social Media
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Affiliate Link
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Tier
@@ -116,6 +127,26 @@ export default function AffiliatesTable({ affiliates }: AffiliatesTableProps) {
                         <Facebook className="h-5 w-5" />
                       </a>
                     )}
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="flex flex-col space-y-2">
+                    <div className="flex items-center space-x-2">
+                      <Link2 className="h-4 w-4 text-gray-400" />
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          copyToClipboard(affiliate.link_data.link);
+                        }}
+                        className="text-sm text-primary-600 hover:text-primary-700 hover:underline"
+                      >
+                        {affiliate.link_data.link.replace('https://', '')}
+                      </button>
+                    </div>
+                    <div className="flex items-center text-sm text-gray-500">
+                      <MousePointerClick className="h-4 w-4 mr-2" />
+                      <span>{affiliate.link_data.clicks} clicks</span>
+                    </div>
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">

@@ -1,13 +1,31 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { Plus } from 'lucide-react';
 import AffiliatesTable from '@/components/affiliations/AffiliationsTable';
+import AffiliatesFilters, { SortField, SortOrder, TierFilter } from '@/components/affiliations/AffiliatesFilters';
 import type { Affiliation } from '@/types/affiliation';
+
+interface FilterState {
+  search: string;
+  tier: TierFilter;
+  sortBy: SortField;
+  sortOrder: SortOrder;
+  hasLink: boolean | null;
+  hasSocial: boolean | null;
+}
 
 export default function AffiliationsPage() {
   const [affiliates, setAffiliates] = useState<Affiliation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [filters, setFilters] = useState<FilterState>({
+    search: '',
+    tier: 'ALL',
+    sortBy: 'name',
+    sortOrder: 'asc',
+    hasLink: null,
+    hasSocial: null,
+  });
 
   useEffect(() => {
     const fetchAffiliates = async () => {
@@ -30,6 +48,66 @@ export default function AffiliationsPage() {
     fetchAffiliates();
   }, []);
 
+  const filteredAffiliates = useMemo(() => {
+    let result = [...affiliates];
+
+    // Apply search filter
+    if (filters.search) {
+      const searchLower = filters.search.toLowerCase();
+      result = result.filter(affiliate => 
+        affiliate.first_name.toLowerCase().includes(searchLower) ||
+        affiliate.last_name.toLowerCase().includes(searchLower) ||
+        affiliate.alias.toLowerCase().includes(searchLower) ||
+        affiliate.email.toLowerCase().includes(searchLower)
+      );
+    }
+
+    // Apply tier filter
+    if (filters.tier !== 'ALL') {
+      result = result.filter(affiliate => affiliate.tier === filters.tier);
+    }
+
+    // Apply link filter
+    if (filters.hasLink !== null) {
+      result = result.filter(affiliate => 
+        filters.hasLink ? affiliate.link_data?.link : !affiliate.link_data?.link
+      );
+    }
+
+    // Apply social media filter
+    if (filters.hasSocial !== null) {
+      result = result.filter(affiliate => 
+        filters.hasSocial ? (affiliate.instagram || affiliate.facebook) : (!affiliate.instagram && !affiliate.facebook)
+      );
+    }
+
+    // Apply sorting
+    result.sort((a, b) => {
+      let comparison = 0;
+      
+      switch (filters.sortBy) {
+        case 'name':
+          comparison = `${a.first_name} ${a.last_name}`.localeCompare(`${b.first_name} ${b.last_name}`);
+          break;
+        case 'clicks':
+          comparison = (a.link_data?.clicks || 0) - (b.link_data?.clicks || 0);
+          break;
+        case 'joined':
+          comparison = new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+          break;
+        case 'tier':
+          const tierOrder = { PLATINUM: 4, GOLD: 3, SILVER: 2, BRONZE: 1 };
+          comparison = (tierOrder[a.tier as keyof typeof tierOrder] || 0) - 
+                      (tierOrder[b.tier as keyof typeof tierOrder] || 0);
+          break;
+      }
+
+      return filters.sortOrder === 'asc' ? comparison : -comparison;
+    });
+
+    return result;
+  }, [affiliates, filters]);
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -47,7 +125,13 @@ export default function AffiliationsPage() {
           New Affiliate
         </button>
       </div>
-      <AffiliatesTable affiliates={affiliates} />
+
+      <AffiliatesFilters
+        onFiltersChange={setFilters}
+        totalAffiliates={filteredAffiliates.length}
+      />
+
+      <AffiliatesTable affiliates={filteredAffiliates} />
     </div>
   );
 }

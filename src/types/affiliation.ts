@@ -1,17 +1,20 @@
+export interface LinkData {
+  link: string;
+  clicks: number;
+}
+
 export interface Affiliation {
-  id: number;
+  id: string;
   first_name: string;
   last_name: string;
   email: string;
-  alias: string;
-  tax_id: string;
   phone_number: string;
-  instagram: string | null;
-  facebook: string | null;
-  tier: 'BRONZE' | 'SILVER' | 'GOLD' | 'PLATINUM';
+  alias: string;
+  instagram?: string;
+  facebook?: string;
+  tier: string;
   created_at: string;
-  updated_at: string;
-  user: number;
+  link_data: LinkData;
 }
 
 export interface CreateAffiliationData {
