@@ -22,7 +22,7 @@ export default function NovaAffiliateSignupPage() {
               <WelcomeStep 
                 onContinue={() => setShowForm(true)}
                 welcomeTitle="ברוכים הבאים ל<span class='text-primary-600'>תוכנית השותפים של נוגה</span>"
-                welcomeDescription="היי! אני נוגה, ואני כל כך שמחה שבחרת להצטרף לתוכנית השותפים שלי. יחד נבנה קהילה חזקה ומצליחה של בעלי עסקים. אני כאן בשבילך לאורך כל הדרך!"
+                welcomeDescription=" ברוכות הבאות אם את כאן תדעי שלא סתם נבחרת לקחת חלק מקבוצת המשפיעניות של בוקיז - אנחנו כאן כדי לגדול יחד"
                 avatarSrc="/images/noga.jpg"
                 avatarAlt="Noga's Profile Picture"
                 showLogo={true}
