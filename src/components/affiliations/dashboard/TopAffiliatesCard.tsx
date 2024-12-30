@@ -14,7 +14,7 @@ export default function TopAffiliatesCard({ affiliates, referredBusinesses }: To
   // Calculate referral counts for each affiliate
   const referralCounts = affiliates.map(affiliate => ({
     ...affiliate,
-    referralCount: referredBusinesses.filter(rb => rb.affiliate === affiliate.id).length
+    referralCount: referredBusinesses.filter(rb => rb.affiliate === String(affiliate.id)).length
   })).sort((a, b) => b.referralCount - a.referralCount).slice(0, 5);
 
   return (
