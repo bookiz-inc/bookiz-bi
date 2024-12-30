@@ -46,7 +46,7 @@ export default function UserSubscription({ userId, onExtendTrial }: UserSubscrip
 
     const fetchSubscriptionInfo = async () => {
         try {
-            const response = await fetch(`http://localhost:8000/api/v1/subscriptions/user/${userId}/`, {
+            const response = await fetch(`https://api.bookiz.co.il/api/v1/subscriptions/user/${userId}/`, {
                 headers: {
                     'accept': 'application/json',
                     'X-CSRFToken': 'UVRHSrP7XtqtBtddEzh1eyVebVZPZMJJz0siebndgXQW6pxu19R2bubOvqYTrs8X'
