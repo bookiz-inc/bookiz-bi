@@ -17,7 +17,7 @@ export default function RecentReferralsCard({ affiliates, referredBusinesses }: 
     .slice(0, 5)
     .map(referral => ({
       ...referral,
-      affiliate: affiliates.find(a => a.id === Number(referral.affiliate))
+      affiliate: affiliates.find(a => a.id === String(referral.affiliate))
     }));
 
   return (
