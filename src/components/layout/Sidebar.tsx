@@ -21,7 +21,8 @@ import {
     Table,
     Clock,
     Megaphone,
-    MessageSquare
+    MessageSquare,
+    Webhook
 } from "lucide-react";
 
 const navigation = [
@@ -49,6 +50,7 @@ const navigation = [
         icon: Megaphone,
         subItems: [
             {name: "Broadcast Messages", href: "/marketing/broadcast", icon: MessageSquare},
+            {name: "Landing Pages", href: "/marketing/landing-pages", icon: Webhook},
         ]
     },
     {
