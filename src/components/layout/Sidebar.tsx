@@ -22,7 +22,12 @@ import {
     Clock,
     Megaphone,
     MessageSquare,
-    Webhook
+    Webhook,
+    MessageCircleMore,
+    GroupIcon,
+    BookOpen,
+    MessageSquareMore
+
 } from "lucide-react";
 
 const navigation = [
@@ -54,9 +59,27 @@ const navigation = [
         ]
     },
     {
+        name: "External Tools",
+        icon: LinkIcon,
+        subItems: [
+            {
+                name: "Wati Dashboard",
+                href: "https://live.wati.io/384155",
+                icon: MessageCircleMore,
+                external: true
+            },
+            {
+                name: "019SMS",
+                href: "https://019sms.co.il/login",
+                icon: MessageSquareMore,
+                external: true
+            }
+        ]
+    },
+    {
         name: "Affiliations",
         href: "/affiliations/dashboard",
-        icon: LinkIcon,
+        icon: GroupIcon,
         subItems: [
             {
                 name: "Overview",
@@ -69,15 +92,10 @@ const navigation = [
                 icon: Users,
             },
             {
-                name: "Affiliate Signup",
-                href: "/affiliate-signup",
-                icon: File,
+                name: "Signup Forms",
+                href: "/affiliations/signup-forms",
+                icon: BookOpen,
             },
-            {
-                name: "Noga's Signup Page",
-                href: "/affiliate-signup/noga",
-                icon: File,
-            }
         ]
     },
     {
@@ -172,6 +190,8 @@ export default function Sidebar() {
                                     key={subItem.name}
                                     href={subItem.href}
                                     onClick={() => isMobile && setIsMobileMenuOpen(false)}
+                                    target={subItem.external ? "_blank" : undefined}
+                                    rel={subItem.external ? "noopener noreferrer" : undefined}
                                     className={`
                     group flex items-center pl-9 pr-4 py-2 text-sm font-medium rounded-md
                     ${isSubItemActive
