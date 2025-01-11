@@ -27,7 +27,7 @@ export default function UsersPage() {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch('https://api.bookiz.co.il/api/v1/data/analytics/users', {
+      const response = await fetch('https://bookiz-back-pk3wl.ondigitalocean.app/api/v1/data/analytics/users', {
         headers: {
           'accept': 'application/json',
           'X-CSRFToken': 'T6FuCE7CQSjFmI0smDwvvvFxNFrH7myjPphIeYLFeeEMWO97whAWBIJxRN0cUsTo'

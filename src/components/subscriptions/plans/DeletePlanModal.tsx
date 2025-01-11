@@ -21,7 +21,7 @@ export default function DeletePlanModal({ plan, isOpen, onClose, onSuccess }: De
     setError(null);
 
     try {
-      const response = await fetch(`https://api.bookiz.co.il/api/v1/subscriptions/subscription-plans/${plan.id}/`, {
+      const response = await fetch(`https://bookiz-back-pk3wl.ondigitalocean.app/api/v1/subscriptions/subscription-plans/${plan.id}/`, {
         method: 'DELETE',
         headers: {
           'accept': 'application/json',

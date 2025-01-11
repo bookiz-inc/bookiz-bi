@@ -31,7 +31,7 @@ export default function CreatePlanModal({ isOpen, onClose, onSuccess }: CreatePl
     setError(null);
 
     try {
-      const response = await fetch('https://api.bookiz.co.il/api/v1/subscriptions/subscription-plans/', {
+      const response = await fetch('https://bookiz-back-pk3wl.ondigitalocean.app/api/v1/subscriptions/subscription-plans/', {
         method: 'POST',
         headers: {
           'accept': 'application/json',
@@ -189,4 +189,4 @@ export default function CreatePlanModal({ isOpen, onClose, onSuccess }: CreatePl
       </div>
     </Dialog>
   );
-} 
+}

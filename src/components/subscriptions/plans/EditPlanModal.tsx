@@ -28,7 +28,7 @@ export default function EditPlanModal({ plan, isOpen, onClose, onSuccess }: Edit
     setError(null);
 
     try {
-      const response = await fetch(`https://api.bookiz.co.il/api/v1/subscriptions/subscription-plans/${plan.id}/`, {
+      const response = await fetch(`https://bookiz-back-pk3wl.ondigitalocean.app/api/v1/subscriptions/subscription-plans/${plan.id}/`, {
         method: 'PATCH',
         headers: {
           'accept': 'application/json',
@@ -117,4 +117,4 @@ export default function EditPlanModal({ plan, isOpen, onClose, onSuccess }: Edit
       </div>
     </Dialog>
   );
-} 
+}

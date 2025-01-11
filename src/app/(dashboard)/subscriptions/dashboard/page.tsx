@@ -17,15 +17,15 @@ export default function SubscriptionsDashboardPage() {
   const fetchAnalytics = async () => {
     try {
       setIsRefreshing(true);
-      const response = await fetch('https://api.bookiz.co.il/api/v1/subscriptions/analytics/', {
+      const response = await fetch('https://bookiz-back-pk3wl.ondigitalocean.app/api/v1/subscriptions/analytics/', {
         headers: {
           'accept': 'application/json',
           'X-CSRFToken': 'FyiDzYhXY91aqIBcVQuBrhjsufirmwnrhuwlLcyv1COxsm2X2wbRdta6AIzIWLgz'
         }
       });
-      
+
       if (!response.ok) throw new Error('Failed to fetch analytics');
-      
+
       const jsonData = await response.json();
       setData(jsonData);
       setError(null);
@@ -122,4 +122,4 @@ export default function SubscriptionsDashboardPage() {
       </div>
     </motion.div>
   );
-} 
+}

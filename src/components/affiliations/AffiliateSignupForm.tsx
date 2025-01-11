@@ -54,9 +54,9 @@ export function AffiliateSignupForm() {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
-  
+
     try {
-      const response = await fetch('https://api.bookiz.co.il/api/v1/affiliates/', {
+      const response = await fetch('https://bookiz-back-pk3wl.ondigitalocean.app/api/v1/affiliates/', {
         method: 'POST',
         headers: {
           'accept': 'application/json',
@@ -65,7 +65,7 @@ export function AffiliateSignupForm() {
         },
         body: JSON.stringify(formData)
       });
-  
+
       if (response.status === 201) {
         // Redirect to success page instead of direct app redirect
         window.location.href = '/affiliate-signup/success';

@@ -51,7 +51,7 @@ export default function UserDetailContent({ userId }: { userId: string }) {
             setError(null);
             const [userResponse, usageResponse, subscriptionResponse] = await Promise.all([
                 fetch(
-                    `https://api.bookiz.co.il/api/v1/data/analytics/users/${userId}`,
+                    `https://bookiz-back-pk3wl.ondigitalocean.app/api/v1/data/analytics/users/${userId}`,
                     {
                         headers: {
                             accept: "application/json",
@@ -60,7 +60,7 @@ export default function UserDetailContent({ userId }: { userId: string }) {
                     }
                 ),
                 fetch(
-                    `https://api.bookiz.co.il/api/v1/data/analytics/users/${userId}/usage`,
+                    `https://bookiz-back-pk3wl.ondigitalocean.app/api/v1/data/analytics/users/${userId}/usage`,
                     {
                         headers: {
                             accept: "application/json",
@@ -69,7 +69,7 @@ export default function UserDetailContent({ userId }: { userId: string }) {
                     }
                 ),
                 fetch(
-                    `https://api.bookiz.co.il/api/v1/subscriptions/user/${userId}/`,
+                    `https://bookiz-back-pk3wl.ondigitalocean.app/api/v1/subscriptions/user/${userId}/`,
                     {
                         headers: {
                             accept: "application/json",
@@ -151,8 +151,8 @@ export default function UserDetailContent({ userId }: { userId: string }) {
 
             {usage && <UserMetrics usage={usage} />}
 
-            <UserSubscription 
-                userId={userId} 
+            <UserSubscription
+                userId={userId}
                 onExtendTrial={() => setIsExtendTrialModalOpen(true)}
             />
 

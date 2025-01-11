@@ -6,7 +6,7 @@ import { RefreshCw, AlertCircle } from 'lucide-react';
 import type { UpcomingTrials } from '@/types/subscriptionTrials';
 import TrialExpirationSection from '@/components/subscriptions/trials/TrialExpirationSection';
 
-const API_URL = 'https://api.bookiz.co.il/api/v1/subscriptions/trials/upcoming/'
+const API_URL = 'https://bookiz-back-pk3wl.ondigitalocean.app/api/v1/subscriptions/trials/upcoming/'
 
 export default function TrialsPage() {
   const [data, setData] = useState<UpcomingTrials | null>(null);
@@ -23,9 +23,9 @@ export default function TrialsPage() {
           'X-CSRFToken': 'NMQbDUuz0tAvYnlmykOKqFZsHECmkQH9KRZWQipBsA3NdBs4X67IQoanG3y2fmcU'
         }
       });
-      
+
       if (!response.ok) throw new Error('Failed to fetch trials');
-      
+
       const jsonData = await response.json();
       setData(jsonData);
       setError(null);

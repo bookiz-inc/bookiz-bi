@@ -22,7 +22,7 @@ export default function ExtendTrialModal({ isOpen, onClose, userId, currentTrial
         setError(null);
 
         try {
-            const response = await fetch(`https://api.bookiz.co.il/api/v1/subscriptions/trials/extend/`, {
+            const response = await fetch(`https://bookiz-back-pk3wl.ondigitalocean.app/api/v1/subscriptions/trials/extend/`, {
                 method: 'POST',
                 headers: {
                     'accept': 'application/json',

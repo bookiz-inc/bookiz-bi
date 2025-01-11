@@ -13,7 +13,7 @@ export default function AffiliateDetailPage() {
   useEffect(() => {
     const fetchAffiliateStats = async () => {
       try {
-        const response = await fetch(`https://api.bookiz.co.il/api/v1/affiliates/stats/id/${params.id}/`, {
+        const response = await fetch(`https://bookiz-back-pk3wl.ondigitalocean.app/api/v1/affiliates/stats/id/${params.id}/`, {
           headers: {
             'accept': 'application/json',
             'X-CSRFToken': 'B685MGPC42wmfgWYTxVWKqFkqZTkNqqdnIQtZFiA40NBaU241uWpFR7s1Bf17JSa'

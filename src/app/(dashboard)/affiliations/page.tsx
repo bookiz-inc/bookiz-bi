@@ -30,7 +30,7 @@ export default function AffiliationsPage() {
   useEffect(() => {
     const fetchAffiliates = async () => {
       try {
-        const response = await fetch('https://api.bookiz.co.il/api/v1/affiliates/bi/table', {
+        const response = await fetch('https://bookiz-back-pk3wl.ondigitalocean.app/api/v1/affiliates/bi/table', {
           headers: {
             'accept': 'application/json',
             'X-CSRFToken': 'd0m3ye1Dr4TiX9awJjfpJkwpCpbBBZLGZC4rLduBr2axSNgCRggSELYxd1xiVidD'
@@ -54,7 +54,7 @@ export default function AffiliationsPage() {
     // Apply search filter
     if (filters.search) {
       const searchLower = filters.search.toLowerCase();
-      result = result.filter(affiliate => 
+      result = result.filter(affiliate =>
         affiliate.first_name.toLowerCase().includes(searchLower) ||
         affiliate.last_name.toLowerCase().includes(searchLower) ||
         affiliate.alias.toLowerCase().includes(searchLower) ||
@@ -69,14 +69,14 @@ export default function AffiliationsPage() {
 
     // Apply link filter
     if (filters.hasLink !== null) {
-      result = result.filter(affiliate => 
+      result = result.filter(affiliate =>
         filters.hasLink ? affiliate.link_data?.link : !affiliate.link_data?.link
       );
     }
 
     // Apply social media filter
     if (filters.hasSocial !== null) {
-      result = result.filter(affiliate => 
+      result = result.filter(affiliate =>
         filters.hasSocial ? (affiliate.instagram || affiliate.facebook) : (!affiliate.instagram && !affiliate.facebook)
       );
     }
@@ -84,7 +84,7 @@ export default function AffiliationsPage() {
     // Apply sorting
     result.sort((a, b) => {
       let comparison = 0;
-      
+
       switch (filters.sortBy) {
         case 'name':
           comparison = `${a.first_name} ${a.last_name}`.localeCompare(`${b.first_name} ${b.last_name}`);
@@ -97,7 +97,7 @@ export default function AffiliationsPage() {
           break;
         case 'tier':
           const tierOrder = { PLATINUM: 4, GOLD: 3, SILVER: 2, BRONZE: 1 };
-          comparison = (tierOrder[a.tier as keyof typeof tierOrder] || 0) - 
+          comparison = (tierOrder[a.tier as keyof typeof tierOrder] || 0) -
                       (tierOrder[b.tier as keyof typeof tierOrder] || 0);
           break;
       }

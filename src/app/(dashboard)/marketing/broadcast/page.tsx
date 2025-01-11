@@ -7,7 +7,7 @@ import type { BroadcastSMSRequest, BroadcastSMSResponse, PreviewResponse, Broadc
 
 const API_URL = process.env.NODE_ENV === 'development'
   ? 'http://localhost:8000'
-  : 'https://api.bookiz.co.il/api/v1';
+  : 'https://bookiz-back-pk3wl.ondigitalocean.app/api/v1';
 
 export default function BroadcastPage() {
   const [message, setMessage] = useState('');
@@ -81,7 +81,7 @@ export default function BroadcastPage() {
       }
 
       const previewData: PreviewResponse = await previewResponse.json();
-      
+
       if (previewData.total_count === 0) {
         throw new Error('No recipients match the selected criteria');
       }
@@ -98,13 +98,13 @@ export default function BroadcastPage() {
   const handleFilterChange = (key: keyof BroadcastSMSRequest, value: any) => {
     setFilter(prev => {
       const newFilter = { ...prev };
-      
+
       if (key === 'only_trial_users' && value) {
         delete newFilter.subscription_status;
       } else if (key === 'subscription_status' && value) {
         delete newFilter.only_trial_users;
       }
-      
+
       if (key === 'joined_within_days' && value) {
         delete newFilter.joined_within_months;
       } else if (key === 'joined_within_months' && value) {
@@ -123,7 +123,7 @@ export default function BroadcastPage() {
 
   const handleAddPhoneNumber = () => {
     if (!phoneNumberInput) return;
-    
+
     // Basic Israeli phone number validation
     const formattedNumber = phoneNumberInput.replace(/\D/g, '');
     if (formattedNumber.length !== 10 || !formattedNumber.startsWith('05')) {
@@ -226,7 +226,7 @@ export default function BroadcastPage() {
             /* Filters */
             <div className="bg-white rounded-lg shadow p-6">
               <h2 className="text-lg font-medium text-gray-900 mb-4">Target Audience</h2>
-              
+
               {/* User Type */}
               <div className="space-y-4 mb-6">
                 <label className="flex items-center space-x-3">
@@ -238,7 +238,7 @@ export default function BroadcastPage() {
                   />
                   <span className="text-sm text-gray-700">All Business Users</span>
                 </label>
-                
+
                 <label className="flex items-center space-x-3">
                   <input
                     type="checkbox"
@@ -303,7 +303,7 @@ export default function BroadcastPage() {
             /* Manual Phone Numbers */
             <div className="bg-white rounded-lg shadow p-6">
               <h2 className="text-lg font-medium text-gray-900 mb-4">Phone Numbers</h2>
-              
+
               <div className="flex space-x-2 mb-4">
                 <input
                   type="tel"
@@ -382,7 +382,7 @@ export default function BroadcastPage() {
                 </button>
               )}
             </div>
-            
+
             {isLoading ? (
               <div className="flex flex-col items-center justify-center py-8">
                 <Loader2 className="h-8 w-8 text-primary-600 animate-spin" />
@@ -458,4 +458,4 @@ export default function BroadcastPage() {
       </div>
     </motion.div>
   );
-} 
+}

@@ -22,7 +22,7 @@ export default function UserAffiliation({ userId }: UserAffiliationProps) {
       setIsRetrying(false);
 
       const response = await fetch(
-        `https://api.bookiz.co.il/api/v1/data/analytics/users/${userId}/affiliate`,
+        `https://bookiz-back-pk3wl.ondigitalocean.app/api/v1/data/analytics/users/${userId}/affiliate`,
         {
           headers: {
             'accept': 'application/json',
@@ -107,10 +107,10 @@ export default function UserAffiliation({ userId }: UserAffiliationProps) {
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            transition={{ 
+            transition={{
               type: "spring",
               stiffness: 260,
-              damping: 20 
+              damping: 20
             }}
             className="text-5xl mb-4"
           >
@@ -134,7 +134,7 @@ export default function UserAffiliation({ userId }: UserAffiliationProps) {
             transition={{ delay: 0.4 }}
             className="mt-6"
           >
-           
+
           </motion.div>
         </div>
       </motion.div>

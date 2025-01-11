@@ -73,6 +73,12 @@ const navigation = [
                 href: "https://019sms.co.il/login",
                 icon: MessageSquareMore,
                 external: true
+            },
+            {
+                name: "Mixpanel",
+                href: "https://eu.mixpanel.com/project/3395811/view/3900831/app/users",
+                icon: BarChart3,
+                external: true
             }
         ]
     },

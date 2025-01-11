@@ -15,7 +15,7 @@ export default function AffiliationsDashboardPage() {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const response = await fetch('https://api.bookiz.co.il/api/v1/affiliates/bi/dashboard', {
+        const response = await fetch('https://bookiz-back-pk3wl.ondigitalocean.app/api/v1/affiliates/bi/dashboard', {
           headers: {
             'accept': 'application/json',
             'X-CSRFToken': 'RbgHX04sWOuRIkldBtuEEXToB0Neu9Me0Gj8g7zgog336TeL1rgycFAgdYTMSgbt'
@@ -55,16 +55,16 @@ export default function AffiliationsDashboardPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <TopAffiliatesCard affiliates={data.affiliates} referredBusinesses={data.referred_businesses} />
-        <RecentReferralsCard 
-          referredBusinesses={data.referred_businesses} 
-          affiliates={data.affiliates} 
+        <RecentReferralsCard
+          referredBusinesses={data.referred_businesses}
+          affiliates={data.affiliates}
         />
       </div>
 
-      <ReferralsTrendChart 
+      <ReferralsTrendChart
         referredBusinesses={data.referred_businesses}
         totalValue={data.total_value_referred_businesses}
       />
     </div>
   );
-} 
+}

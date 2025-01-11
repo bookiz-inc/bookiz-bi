@@ -17,7 +17,7 @@ export default function SubscriptionPlansPage() {
   const fetchPlans = async () => {
     try {
       setIsRefreshing(true);
-      const response = await fetch('https://api.bookiz.co.il/api/v1/subscriptions/subscription-plans/?is_active=true', {
+      const response = await fetch('https://bookiz-back-pk3wl.ondigitalocean.app/api/v1/subscriptions/subscription-plans/?is_active=true', {
         headers: {
           'accept': 'application/json',
           'X-CSRFToken': 'fOXn6wI2EkeCJ5xlRP1zyBrzAp668UE1RKb5iKZAHN1ZLJY6YvIPkNidGSnnI9x9'

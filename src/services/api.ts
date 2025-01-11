@@ -1,6 +1,6 @@
 import { DashboardData } from "@/types/api";
 
-const API_URL = 'https://api.bookiz.co.il/api/v1';
+const API_URL = 'https://bookiz-back-pk3wl.ondigitalocean.app/api/v1';
 const API_TOKEN = 'QLnUHOjzuTdB4KEx1DAGSrTRgjUGPSWuM4Z8j8XCSfyIEQNcbhE7YEXRkrtbCYhz';
 
 export async function fetchDashboardData() {
@@ -33,11 +33,11 @@ export async function fetchSMSBalance() {
           'accept': 'application/json'
         }
       });
-  
+
       if (!response.ok) {
         throw new Error('Failed to fetch SMS balance');
       }
-  
+
       return await response.json();
     } catch (error) {
       console.error('Error fetching SMS balance:', error);
