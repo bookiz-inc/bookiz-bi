@@ -28,7 +28,7 @@ export async function fetchDashboardData() {
 // Add this function to your existing api.ts
 export async function fetchSMSBalance() {
     try {
-      const response = await fetch('https://sms.bookiz.co.il/019sms/balance', {
+      const response = await fetch('https://bookiz-notifications-api-uwst6.ondigitalocean.app/019sms/balance', {
         headers: {
           'accept': 'application/json'
         }
