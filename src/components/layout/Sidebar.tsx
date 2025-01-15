@@ -56,6 +56,7 @@ const navigation = [
         subItems: [
             {name: "Broadcast Messages", href: "/marketing/broadcast", icon: MessageSquare},
             {name: "Landing Pages", href: "/marketing/landing-pages", icon: Webhook},
+            {name: "WhatsApp Templates", href: "/marketing/whatsapp-templates", icon: MessageSquare},
         ]
     },
     {
