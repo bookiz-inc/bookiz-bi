@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageSquare, ChevronDown, ExternalLink, CheckCircle2, XCircle, Image as ImageIcon, FileText, AlertCircle } from 'lucide-react';
+import { MessageSquare, ChevronDown, ExternalLink, CheckCircle2, XCircle, Image as ImageIcon, FileText, AlertCircle, Eye, EyeOff } from 'lucide-react';
 
 interface WhatsAppTemplate {
   id: string;
@@ -37,12 +37,18 @@ interface WhatsAppTemplatesProps {
 export default function WhatsAppTemplates({ templates }: WhatsAppTemplatesProps) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [showDeleted, setShowDeleted] = useState(false);
 
   const categories = ['all', ...new Set(templates.map(t => t.category.toLowerCase()))];
   
-  const filteredTemplates = templates.filter(t => 
-    selectedCategory === 'all' || t.category.toLowerCase() === selectedCategory
-  );
+  const filteredTemplates = templates.filter(t => {
+    // First filter by deleted status
+    if (!showDeleted && t.status.toLowerCase() === 'deleted') {
+      return false;
+    }
+    // Then filter by category
+    return selectedCategory === 'all' || t.category.toLowerCase() === selectedCategory;
+  });
 
   const getHeaderIcon = (type: number) => {
     switch (type) {
@@ -77,21 +83,52 @@ export default function WhatsAppTemplates({ templates }: WhatsAppTemplatesProps)
           <p className="mt-1 text-sm text-gray-500">Manage and view your WhatsApp message templates</p>
         </div>
         
-        <div className="flex flex-wrap gap-2">
-          {categories.map((category) => (
-            <button
-              key={category}
-              onClick={() => setSelectedCategory(category)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                selectedCategory === category
-                  ? 'bg-primary-600 text-white'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
-            >
-              {category.charAt(0).toUpperCase() + category.slice(1)}
-            </button>
-          ))}
+        <div className="flex flex-col sm:flex-row gap-4 items-end sm:items-center">
+          {/* Show/Hide Deleted Toggle */}
+          <button
+            onClick={() => setShowDeleted(!showDeleted)}
+            className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors border border-gray-200 hover:bg-gray-50"
+          >
+            {showDeleted ? (
+              <>
+                <EyeOff className="h-4 w-4 text-gray-700" />
+                <span className="text-gray-700">Hide Deleted</span>
+              </>
+            ) : (
+              <>
+                <Eye className="h-4 w-4 text-gray-700" />
+                <span className="text-gray-700">Show Deleted</span>
+              </>
+            )}
+          </button>
+
+          {/* Category Filters */}
+          <div className="flex flex-wrap gap-2">
+            {categories.map((category) => (
+              <button
+                key={category}
+                onClick={() => setSelectedCategory(category)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                  selectedCategory === category
+                    ? 'bg-primary-600 text-white'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
+              >
+                {category.charAt(0).toUpperCase() + category.slice(1)}
+              </button>
+            ))}
+          </div>
         </div>
+      </div>
+
+      {/* Templates Count */}
+      <div className="text-sm text-gray-500">
+        Showing {filteredTemplates.length} template{filteredTemplates.length !== 1 ? 's' : ''}
+        {!showDeleted && templates.some(t => t.status.toLowerCase() === 'deleted') && (
+          <span className="ml-1">
+            (excluding deleted templates)
+          </span>
+        )}
       </div>
 
       {/* Templates Grid */}
