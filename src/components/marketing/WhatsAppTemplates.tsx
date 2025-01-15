@@ -111,7 +111,7 @@ export default function WhatsAppTemplates({ templates }: WhatsAppTemplatesProps)
                 <div className="flex items-center space-x-3">
                   {getHeaderIcon(template.header?.type || 0)}
                   <div>
-                    <h3 className="text-sm font-medium text-gray-900">
+                    <h3 className="text-sm font-medium text-gray-900 text-right" dir="rtl">
                       {template.elementName.split('_').map(word => 
                         word.charAt(0).toUpperCase() + word.slice(1)
                       ).join(' ')}
@@ -135,7 +135,7 @@ export default function WhatsAppTemplates({ templates }: WhatsAppTemplatesProps)
                   expandedId === template.id ? '' : 'max-h-24 overflow-hidden'
                 }`}
               >
-                <p className="text-sm text-gray-600 whitespace-pre-line">
+                <p className="text-sm text-gray-600 whitespace-pre-line text-right" dir="rtl">
                   {template.body}
                 </p>
                 {expandedId !== template.id && (
@@ -159,7 +159,7 @@ export default function WhatsAppTemplates({ templates }: WhatsAppTemplatesProps)
             {/* Template Actions */}
             {template.buttons && template.buttons.length > 0 && (
               <div className="px-4 py-3 bg-gray-50 border-t border-gray-100">
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 justify-end">
                   {template.buttons.map((button, index) => (
                     button.parameter.url ? (
                       <a
@@ -168,14 +168,16 @@ export default function WhatsAppTemplates({ templates }: WhatsAppTemplatesProps)
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white border border-gray-200 text-gray-700 hover:bg-gray-50"
+                        dir="rtl"
                       >
                         {button.parameter.text}
-                        <ExternalLink className="ml-1 h-3 w-3" />
+                        <ExternalLink className="mr-1 h-3 w-3" />
                       </a>
                     ) : (
                       <span
                         key={index}
                         className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white border border-gray-200 text-gray-700"
+                        dir="rtl"
                       >
                         {button.parameter.text}
                       </span>
