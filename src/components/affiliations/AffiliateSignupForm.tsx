@@ -50,6 +50,23 @@ export function AffiliateSignupForm() {
     tier: 'SILVER'
   });
 
+  const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value;
+    
+    // Remove any non-digit characters
+    value = value.replace(/\D/g, '');
+    
+    // Ensure the number starts with 0
+    if (value && value[0] !== '0') {
+      value = '0' + value;
+    }
+    
+    // Limit to 10 digits (Israeli phone number format)
+    value = value.slice(0, 10);
+    
+    setFormData({ ...formData, phone_number: value });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -191,15 +208,21 @@ export function AffiliateSignupForm() {
               <input
                 type="tel"
                 value={formData.phone_number}
-                onChange={(e) => setFormData({ ...formData, phone_number: e.target.value })}
+                onChange={handlePhoneNumberChange}
                 className="text-black block w-full px-4 py-3 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-base"
                 required
                 autoComplete="tel"
                 name="phone_number"
-                inputMode="tel"
+                inputMode="numeric"
+                pattern="^0\d{9}$"
+                maxLength={10}
+                placeholder="0501234567"
                 dir="ltr"
               />
               <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <div className="absolute -bottom-5 right-0 text-xs text-gray-500">
+                מספר טלפון חייב להתחיל ב-0 ולהכיל 10 ספרות
+              </div>
             </div>
           </div>
 
