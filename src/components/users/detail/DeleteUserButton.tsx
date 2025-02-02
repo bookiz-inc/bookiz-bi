@@ -30,7 +30,8 @@ export default function DeleteUserButton({ userId, className }: DeleteUserButton
                     method: 'DELETE',
                     headers: {
                         'accept': 'application/json',
-                        'X-CSRFToken': 'OI4g2G2n3VqB0ivDFkoQMFlwt7KuFufDR0g0PR7ExRLEuimWL9vaUrdvncmtNAUr'
+                        'X-CSRFToken': 'OI4g2G2n3VqB0ivDFkoQMFlwt7KuFufDR0g0PR7ExRLEuimWL9vaUrdvncmtNAUr',
+                        'X-Frontend-Token' :'0suV43CiTkrrzk3Q'
                     }
                 }
             );
