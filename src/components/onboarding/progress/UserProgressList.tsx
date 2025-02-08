@@ -111,7 +111,7 @@ export function UserProgressList({ filters }: UserProgressListProps) {
             case "IN_PROGRESS":
                 return <Badge>In Progress</Badge>;
             case "COMPLETED":
-                return <Badge variant="success">Completed</Badge>;
+                return <Badge variant="default">Completed</Badge>;
             case "STOPPED":
                 return <Badge variant="destructive">Stopped</Badge>;
         }
@@ -233,4 +233,4 @@ export function UserProgressList({ filters }: UserProgressListProps) {
             )}
         </>
     );
-} 
+}

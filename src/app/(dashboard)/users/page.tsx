@@ -15,6 +15,8 @@ export default function UsersPage() {
     status: '',
     subscriptionPlan: '',
     hasAffiliation: '',
+    hasPaymentToken: '',
+    subscriptionStatus: '',
   });
   const [sort, setSort] = useState<SortOptions>({
     field: 'date_joined',

@@ -41,7 +41,7 @@ export default function UserSubscription({ userId, onExtendTrial }: UserSubscrip
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        fetchSubscriptionInfo();
+        fetchSubscriptionInfo().then(r => r);
     }, [userId]);
 
     const fetchSubscriptionInfo = async () => {

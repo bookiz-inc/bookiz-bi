@@ -49,30 +49,7 @@ export function DeleteTemplateDialog({
     return (
         <AlertDialog open={open} onOpenChange={onClose}>
             <AlertDialogContent>
-                <AlertDialogHeader>
-                    <AlertDialogTitle>Delete Template</AlertDialogTitle>
-                    <AlertDialogDescription>
-                        Are you sure you want to delete the template "{template.name}"? This
-                        action cannot be undone, and all associated steps will be deleted.
-                        {template.is_active && (
-                            <p className="mt-2 text-red-600">
-                                Warning: This template is currently active and may be in use by
-                                some users.
-                            </p>
-                        )}
-                    </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                    <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
-                    <AlertDialogAction
-                        onClick={handleDelete}
-                        disabled={isDeleting}
-                        className="bg-red-600 hover:bg-red-700"
-                    >
-                        {isDeleting ? "Deleting..." : "Delete Template"}
-                    </AlertDialogAction>
-                </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
     );
-} 
+}
