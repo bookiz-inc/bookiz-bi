@@ -13,9 +13,11 @@ import {
   XCircle,
   ChevronRight,
   AlertCircle,
-  TrendingUp
+  TrendingUp,
+  SortAsc,
+  SortDesc
 } from "lucide-react";
-import type { User } from "@/types/user";
+import type { User, Subscription } from "@/types/user";
 import { FilterOptions, SortOptions } from "./UserFilters";
 
 interface UsersTableProps {
@@ -39,15 +41,22 @@ export default function UsersTable({ users, searchQuery, filters, sort }: UsersT
         user.business?.name?.toLowerCase().includes(searchLower);
 
       const matchesStatus = !filters.status || 
-        (filters.status === 'active' ? user.is_active : !user.is_active);
+        (filters.status === 'verified' ? user.business.is_payment_verified : !user.business.is_payment_verified);
 
       const matchesPlan = !filters.subscriptionPlan || 
-        user.business?.wanted_plan === filters.subscriptionPlan;
+        user.business?.subscription?.plan?.billing_cycle === filters.subscriptionPlan;
 
-      // const matchesAffiliation = !filters.hasAffiliation || 
-      //   (filters.hasAffiliation === 'true' ? user.business?.from_affiliate : !user.business?.from_affiliate);
+      const matchesSubscriptionStatus = !filters.subscriptionStatus ||
+        user.business?.subscription?.status === filters.subscriptionStatus;
 
-      return matchesSearch && matchesStatus && matchesPlan ;
+      const matchesAffiliation = !filters.hasAffiliation || 
+        (filters.hasAffiliation === 'true' ? !!user.business?.referred_by : !user.business?.referred_by);
+
+      const matchesPaymentToken = !filters.hasPaymentToken ||
+        (filters.hasPaymentToken === 'true' ? user.business?.subscription?.has_token : !user.business?.subscription?.has_token);
+
+      return matchesSearch && matchesStatus && matchesPlan && matchesSubscriptionStatus && 
+             matchesAffiliation && matchesPaymentToken;
     })
     .sort((a, b) => {
       const direction = sort.direction === 'asc' ? 1 : -1;
@@ -62,14 +71,39 @@ export default function UsersTable({ users, searchQuery, filters, sort }: UsersT
       }
     });
 
-  const getSubscriptionBadgeColor = (plan: string) => {
-    switch (plan) {
-      case 'monthly':
-        return 'bg-purple-100 text-purple-800';
-      case 'annual':
-        return 'bg-yellow-100 text-yellow-800';
+  const getSubscriptionBadgeColor = (subscription: Subscription) => {
+    switch (subscription.status) {
+      case 'ACTIVE':
+        return subscription.plan.billing_cycle === 'YEARLY' 
+          ? 'bg-yellow-100 text-yellow-800'
+          : 'bg-purple-100 text-purple-800';
+      case 'TRIAL':
+        return 'bg-blue-100 text-blue-800';
+      case 'EXPIRED':
+        return 'bg-red-100 text-red-800';
+      case 'CANCELLED':
+        return 'bg-gray-100 text-gray-800';
+      case 'PENDING':
+        return 'bg-orange-100 text-orange-800';
       default:
         return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getSubscriptionStatusText = (subscription: Subscription) => {
+    switch (subscription.status) {
+      case 'ACTIVE':
+        return subscription.plan.name;
+      case 'TRIAL':
+        return `Trial (${subscription.days_left_for_trial} days left)`;
+      case 'EXPIRED':
+        return 'Subscription Expired';
+      case 'CANCELLED':
+        return 'Subscription Cancelled';
+      case 'PENDING':
+        return 'Pending Activation';
+      default:
+        return subscription.plan.name;
     }
   };
 
@@ -101,28 +135,62 @@ export default function UsersTable({ users, searchQuery, filters, sort }: UsersT
     }
   };
 
+  const handleSortChange = (field: string) => {
+    // Implement the logic to handle sort change
+  };
+
   return (
     <div className="bg-white rounded-lg shadow overflow-hidden">
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                User
+              <th scope="col" className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <div className="flex items-center space-x-1">
+                  <span>User Details</span>
+                  <button onClick={() => handleSortChange('name')} className="ml-1 p-1 hover:bg-gray-100 rounded">
+                    {sort.field === 'name' ? (
+                      sort.direction === 'asc' ? <SortAsc className="h-3 w-3" /> : <SortDesc className="h-3 w-3" />
+                    ) : null}
+                  </button>
+                </div>
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Business
+              <th scope="col" className="hidden md:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <div className="flex items-center justify-between">
+                  <span>Subscription Status</span>
+                </div>
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Contact
+              <th scope="col" className="hidden lg:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <div className="flex items-center justify-between">
+                  <span>Business Info</span>
+                </div>
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Future Appointments
+              <th scope="col" className="hidden sm:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <div className="flex items-center space-x-1">
+                  <span>Appointments</span>
+                  <button onClick={() => handleSortChange('future_appointments')} className="ml-1 p-1 hover:bg-gray-100 rounded">
+                    {sort.field === 'future_appointments' ? (
+                      sort.direction === 'asc' ? <SortAsc className="h-3 w-3" /> : <SortDesc className="h-3 w-3" />
+                    ) : null}
+                  </button>
+                </div>
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Joined
+              <th scope="col" className="hidden md:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <div className="flex items-center space-x-1">
+                  <span>Join Date</span>
+                  <button onClick={() => handleSortChange('date_joined')} className="ml-1 p-1 hover:bg-gray-100 rounded">
+                    {sort.field === 'date_joined' ? (
+                      sort.direction === 'asc' ? <SortAsc className="h-3 w-3" /> : <SortDesc className="h-3 w-3" />
+                    ) : null}
+                  </button>
+                </div>
               </th>
-              <th className="relative px-6 py-3">
+              <th scope="col" className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <div className="flex items-center justify-between">
+                  <span>Status</span>
+                </div>
+              </th>
+              <th scope="col" className="relative px-4 sm:px-6 py-3">
                 <span className="sr-only">Actions</span>
               </th>
             </tr>
@@ -134,63 +202,102 @@ export default function UsersTable({ users, searchQuery, filters, sort }: UsersT
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.05 }}
-                className="hover:bg-gray-50 cursor-pointer"
+                className="hover:bg-gray-50 cursor-pointer group"
                 onClick={() => router.push(`/users/${user.id}`)}
               >
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-4 sm:px-6 py-4">
                   <div className="flex items-center">
-                    <div className="h-10 w-10 flex-shrink-0">
-                      <div className="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center">
-                        <span className="text-primary-700 font-medium">
+                    <div className="h-8 w-8 sm:h-10 sm:w-10 flex-shrink-0">
+                      <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary-100 flex items-center justify-center">
+                        <span className="text-primary-700 text-sm sm:text-base font-medium">
                           {user.first_name[0]}{user.last_name[0]}
                         </span>
                       </div>
                     </div>
-                    <div className="ml-4">
-                      <div className="text-sm font-medium text-gray-900">
-                        {user.first_name} {user.last_name}
+                    <div className="ml-3 sm:ml-4">
+                      <div className="flex flex-col sm:flex-row sm:items-center">
+                        <div className="text-sm font-medium text-gray-900">
+                          {user.first_name} {user.last_name}
+                        </div>
+                        <div className="mt-1 sm:mt-0 sm:ml-2">
+                          {user.business.is_payment_verified ? (
+                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-50 text-green-800">
+                              <div className="w-1 h-1 rounded-full bg-green-400 mr-1"></div>
+                              System Access
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-50 text-red-800">
+                              <div className="w-1 h-1 rounded-full bg-red-400 mr-1"></div>
+                              No Access
+                            </span>
+                          )}
+                        </div>
                       </div>
-                      <div className="text-sm text-gray-500">
-                        ID: {user.id}
+                      <div className="text-xs sm:text-sm text-gray-500 mt-1">
+                        <div className="flex items-center space-x-2">
+                          <Mail className="h-3 w-3" />
+                          <span className="truncate max-w-[150px] sm:max-w-none">{user.email}</span>
+                        </div>
+                        <div className="flex items-center space-x-2 mt-1">
+                          <Phone className="h-3 w-3" />
+                          <span>{user.phone_number}</span>
+                        </div>
+                      </div>
+                      {/* Mobile-only subscription status */}
+                      <div className="md:hidden mt-2">
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                          getSubscriptionBadgeColor(user.business.subscription)
+                        }`}>
+                          <Crown className="w-3 h-3 mr-1" />
+                          {getSubscriptionStatusText(user.business.subscription)}
+                        </span>
                       </div>
                     </div>
                   </div>
                 </td>
 
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="hidden md:table-cell px-6 py-4 whitespace-nowrap">
+                  <div className="flex flex-col">
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                      getSubscriptionBadgeColor(user.business.subscription)
+                    }`}>
+                      <Crown className="w-3 h-3 mr-1" />
+                      {getSubscriptionStatusText(user.business.subscription)}
+                    </span>
+                    {user.business.subscription.is_trial && (
+                      <div className="text-xs text-gray-500 mt-1">
+                        Expires: {new Date(user.business.subscription.trial_end_date).toLocaleDateString()}
+                      </div>
+                    )}
+                    {!user.business.subscription.has_token && (
+                      <span className="mt-1 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-50 text-red-700">
+                        <AlertCircle className="w-3 h-3 mr-1" />
+                        No Payment Method
+                      </span>
+                    )}
+                  </div>
+                </td>
+
+                <td className="hidden lg:table-cell px-6 py-4 whitespace-nowrap">
                   <div className="flex flex-col">
                     <div className="text-sm font-medium text-gray-900">
                       {user.business.name || 'No Business Name'}
                     </div>
-                    <div className="flex items-center mt-1">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        getSubscriptionBadgeColor(user.business.wanted_plan || user.business.subscription_plan)
-                      }`}>
-                        <Crown className="w-3 h-3 mr-1" />
-                        {user.business.wanted_plan || user.business.subscription_plan}
-                      </span>
-                      {user.business.pre_launch_user && (
-                        <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                          Pre-launch
-                        </span>
-                      )}
+                    <div className="text-xs text-gray-500 mt-1">
+                      ID: {user.business.id.slice(0, 8)}
                     </div>
+                    {user.business.referred_by && (
+                      <div className="flex items-center mt-1">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-50 text-indigo-700">
+                          <Building2 className="w-3 h-3 mr-1" />
+                          Referred by: {user.business.referred_by.name}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </td>
 
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex flex-col space-y-1">
-                    <div className="flex items-center text-sm text-gray-500">
-                      <Mail className="mr-2 h-4 w-4" />
-                      {user.email}
-                    </div>
-                    <div className="flex items-center text-sm text-gray-500">
-                      <Phone className="mr-2 h-4 w-4" />
-                      {user.phone_number}
-                    </div>
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="hidden sm:table-cell px-6 py-4 whitespace-nowrap">
                   {(() => {
                     const { color, icon: Icon, text } = getFutureAppointmentsBadge(user.business.future_appointments);
                     return (
@@ -205,33 +312,41 @@ export default function UsersTable({ users, searchQuery, filters, sort }: UsersT
                     );
                   })()}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex items-center text-sm text-gray-500">
-                    <Calendar className="mr-2 h-4 w-4" />
-                    {new Date(user.date_joined).toLocaleDateString('en-GB', {
-                      day: '2-digit',
-                      month: '2-digit',
-                      year: 'numeric'
-                    })}
+
+                <td className="hidden md:table-cell px-6 py-4 whitespace-nowrap">
+                  <div className="flex flex-col">
+                    <div className="text-sm text-gray-900">
+                      {new Date(user.date_joined).toLocaleDateString('en-GB', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric'
+                      })}
+                    </div>
+                    <div className="text-xs text-gray-500 mt-1">
+                      {new Date(user.date_joined).toLocaleTimeString('en-GB', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </div>
                   </div>
                 </td>
 
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {user.is_active ? (
+                <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+                  {user.business.is_payment_verified ? (
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                       <CheckCircle2 className="w-3 h-3 mr-1" />
-                      Active
+                      Verified
                     </span>
                   ) : (
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
                       <XCircle className="w-3 h-3 mr-1" />
-                      Inactive
+                      Unverified
                     </span>
                   )}
                 </td>
 
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <ChevronRight className="h-5 w-5 text-gray-400" />
+                <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <ChevronRight className="h-5 w-5 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </td>
               </motion.tr>
             ))}

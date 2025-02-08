@@ -26,7 +26,11 @@ import {
     MessageCircleMore,
     GroupIcon,
     BookOpen,
-    MessageSquareMore
+    MessageSquareMore,
+    Workflow,
+    ListChecks,
+    ClipboardList,
+    Shield
 
 } from "lucide-react";
 
@@ -35,6 +39,15 @@ const navigation = [
         name: "Dashboard",
         href: "/",
         icon: LayoutDashboard,
+    },
+    {
+        name: "Onboarding",
+        icon: Workflow,
+        subItems: [
+            {name: "Templates", href: "/onboarding/templates", icon: ClipboardList},
+            {name: "User Progress", href: "/onboarding/progress", icon: ListChecks},
+            {name: "Analytics", href: "/onboarding/analytics", icon: BarChart3},
+        ]
     },
     {
         name: "Users",
@@ -104,6 +117,12 @@ const navigation = [
                 icon: BookOpen,
             },
         ]
+    },
+    {
+        name: "Admin",
+        icon: Shield,
+        href: "https://honeypot.bookiz.co.il/leo/management-portal/",
+        external: true
     },
     {
         name: "Analytics",

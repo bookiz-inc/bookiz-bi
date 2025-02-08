@@ -11,7 +11,9 @@ interface UserFiltersProps {
 export interface FilterOptions {
   status: string;
   subscriptionPlan: string;
+  subscriptionStatus: string;
   hasAffiliation: string;
+  hasPaymentToken: string;
 }
 
 export interface SortOptions {
@@ -23,7 +25,9 @@ export default function UserFilters({ onFilterChange, onSortChange }: UserFilter
   const [filters, setFilters] = useState<FilterOptions>({
     status: '',
     subscriptionPlan: '',
+    subscriptionStatus: '',
     hasAffiliation: '',
+    hasPaymentToken: '',
   });
 
   const [sort, setSort] = useState<SortOptions>({
@@ -47,45 +51,71 @@ export default function UserFilters({ onFilterChange, onSortChange }: UserFilter
   };
 
   return (
-    <div className="flex flex-wrap gap-3 items-center text-black">
-      <div className="flex items-center gap-2">
-        <Filter className="h-4 w-4 text-gray-500" />
+    <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:flex-wrap sm:gap-3 items-start sm:items-center">
+      <div className="w-full sm:w-auto flex flex-col sm:flex-row items-start sm:items-center gap-2">
+        <div className="flex items-center gap-2 w-full sm:w-auto">
+          <Filter className="h-4 w-4 text-gray-500" />
+          <select
+            value={filters.status}
+            onChange={(e) => handleFilterChange('status', e.target.value)}
+            className="w-full sm:w-auto rounded-md border border-gray-200 py-2 px-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+          >
+            <option value="">All Access Status</option>
+            <option value="verified">Has System Access</option>
+            <option value="unverified">No System Access</option>
+          </select>
+        </div>
+
         <select
-          value={filters.status}
-          onChange={(e) => handleFilterChange('status', e.target.value)}
-          className="rounded-md border border-gray-200 py-2 px-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+          value={filters.subscriptionStatus}
+          onChange={(e) => handleFilterChange('subscriptionStatus', e.target.value)}
+          className="w-full sm:w-auto rounded-md border border-gray-200 py-2 px-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
         >
-          <option value="">All Status</option>
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
+          <option value="">All Subscription Status</option>
+          <option value="ACTIVE">Active</option>
+          <option value="TRIAL">Trial</option>
+          <option value="EXPIRED">Expired</option>
+          <option value="CANCELLED">Cancelled</option>
+          <option value="PENDING">Pending</option>
         </select>
 
         <select
           value={filters.subscriptionPlan}
           onChange={(e) => handleFilterChange('subscriptionPlan', e.target.value)}
-          className="rounded-md border border-gray-200 py-2 px-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+          className="w-full sm:w-auto rounded-md border border-gray-200 py-2 px-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
         >
           <option value="">All Plans</option>
-          <option value="monthly">Monthly</option>
-          <option value="annual">Annual</option>
-          {/* <option value="trial">Trial</option> */}
+          <option value="MONTHLY">Monthly</option>
+          <option value="YEARLY">Yearly</option>
         </select>
+      </div>
 
+      <div className="w-full sm:w-auto flex flex-col sm:flex-row items-start sm:items-center gap-2">
         <select
           value={filters.hasAffiliation}
           onChange={(e) => handleFilterChange('hasAffiliation', e.target.value)}
-          className="rounded-md border border-gray-200 py-2 px-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+          className="w-full sm:w-auto rounded-md border border-gray-200 py-2 px-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
         >
           <option value="">All Affiliations</option>
           <option value="true">With Affiliate</option>
           <option value="false">No Affiliate</option>
         </select>
+
+        <select
+          value={filters.hasPaymentToken}
+          onChange={(e) => handleFilterChange('hasPaymentToken', e.target.value)}
+          className="w-full sm:w-auto rounded-md border border-gray-200 py-2 px-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+        >
+          <option value="">All Payment Methods</option>
+          <option value="true">Has Payment Method</option>
+          <option value="false">No Payment Method</option>
+        </select>
       </div>
 
-      <div className="flex items-center gap-2 ml-auto">
+      <div className="w-full sm:w-auto flex items-center gap-2 sm:ml-auto">
         <button
           onClick={() => handleSortChange('date_joined')}
-          className="inline-flex items-center px-3 py-2 border border-gray-200 rounded-md text-sm text-gray-600 hover:bg-gray-50"
+          className="flex-1 sm:flex-none inline-flex items-center justify-center px-3 py-2 border border-gray-200 rounded-md text-sm text-gray-600 hover:bg-gray-50"
         >
           {sort.field === 'date_joined' ? (
             sort.direction === 'asc' ? <SortAsc className="h-4 w-4" /> : <SortDesc className="h-4 w-4" />
@@ -97,7 +127,7 @@ export default function UserFilters({ onFilterChange, onSortChange }: UserFilter
 
         <button
           onClick={() => handleSortChange('future_appointments')}
-          className="inline-flex items-center px-3 py-2 border border-gray-200 rounded-md text-sm text-gray-600 hover:bg-gray-50"
+          className="flex-1 sm:flex-none inline-flex items-center justify-center px-3 py-2 border border-gray-200 rounded-md text-sm text-gray-600 hover:bg-gray-50"
         >
           {sort.field === 'future_appointments' ? (
             sort.direction === 'asc' ? <SortAsc className="h-4 w-4" /> : <SortDesc className="h-4 w-4" />

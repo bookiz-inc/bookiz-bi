@@ -1,12 +1,33 @@
+export interface Plan {
+  name: string;
+  price: string;
+  billing_cycle: 'YEARLY' | 'MONTHLY';
+}
+
+export interface Subscription {
+  status: 'ACTIVE' | 'CANCELLED' | 'PENDING' | 'TRIAL' | 'EXPIRED';
+  start_date: string;
+  end_date: string;
+  trial_end_date: string;
+  is_trial: boolean;
+  is_active: boolean;
+  days_left_for_trial: number;
+  has_token: boolean;
+  plan: Plan;
+}
+
+export interface ReferredBy {
+  name: string;
+}
+
 export interface Business {
   id: string;
   name: string | null;
-  subscription_plan: 'Free' | 'Beta' | 'Premium';
-  pre_launch_user: boolean;
+  subscription: Subscription;
   is_payment_verified: boolean;
   trial_days: number;
-  wanted_plan: string | null;
   future_appointments: number;
+  referred_by?: ReferredBy;
 }
 
 export interface User {
