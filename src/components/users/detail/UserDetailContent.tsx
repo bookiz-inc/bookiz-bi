@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import UserHeader from "./UserHeader";
 import BusinessInfo from "./BusinessInfo";
@@ -12,6 +12,7 @@ import { UserUsage } from "@/types/userUsage";
 import { AlertCircle } from "lucide-react";
 import UserAffiliation from "./UserAffiliation";
 import UserSubscription from './UserSubscription';
+import UserMarketing from './UserMarketing';
 import ExtendTrialModal from './ExtendTrialModal';
 
 interface SubscriptionInfo {
@@ -46,7 +47,7 @@ export default function UserDetailContent({ userId }: { userId: string }) {
     const [error, setError] = useState<string | null>(null);
     const [isExtendTrialModalOpen, setIsExtendTrialModalOpen] = useState(false);
 
-    const fetchData = async () => {
+    const fetchData = useCallback(async () => {
         try {
             setError(null);
             const [userResponse, usageResponse, subscriptionResponse] = await Promise.all([
@@ -98,11 +99,11 @@ export default function UserDetailContent({ userId }: { userId: string }) {
             setIsLoading(false);
             setIsRefreshing(false);
         }
-    };
+    }, [userId]);
 
     useEffect(() => {
         fetchData();
-    }, [userId]);
+    }, [fetchData]);
 
     const handleRefresh = () => {
         setIsRefreshing(true);
@@ -160,6 +161,7 @@ export default function UserDetailContent({ userId }: { userId: string }) {
                 <div className="lg:col-span-2 space-y-6">
                     <BusinessInfo business={user.business} />
                     <UserAffiliation userId={userId} />
+                    <UserMarketing user={user} />
                     <UserActivity userId={userId} />
                 </div>
                 <div className="lg:col-span-1">

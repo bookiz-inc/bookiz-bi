@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { CreditCard, Calendar, Clock, AlertCircle, ChevronsRight } from 'lucide-react';
+import { CreditCard, Calendar, Clock, AlertCircle, ChevronsRight, ShieldAlert } from 'lucide-react';
 import { format } from 'date-fns';
 
 interface PaymentToken {
@@ -40,11 +40,7 @@ export default function UserSubscription({ userId, onExtendTrial }: UserSubscrip
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        fetchSubscriptionInfo().then(r => r);
-    }, [userId]);
-
-    const fetchSubscriptionInfo = async () => {
+    const fetchSubscriptionInfo = useCallback(async () => {
         try {
             const response = await fetch(`https://bookiz-back-pk3wl.ondigitalocean.app/api/v1/subscriptions/user/${userId}/`, {
                 headers: {
@@ -65,7 +61,11 @@ export default function UserSubscription({ userId, onExtendTrial }: UserSubscrip
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [userId]);
+
+    useEffect(() => {
+        fetchSubscriptionInfo();
+    }, [fetchSubscriptionInfo]);
 
     if (isLoading) {
         return (
@@ -158,10 +158,10 @@ export default function UserSubscription({ userId, onExtendTrial }: UserSubscrip
                 </div>
             </div>
 
-            {/* Payment Methods */}
-            {subscription.payment_tokens.length > 0 && (
-                <div className="mt-6">
-                    <h3 className="text-lg font-medium text-gray-900 mb-4">Payment Methods</h3>
+            {/* Payment Methods Section */}
+            <div className="mt-6">
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Payment Methods</h3>
+                {subscription.payment_tokens.length > 0 ? (
                     <div className="space-y-3">
                         {subscription.payment_tokens.map((token, index) => (
                             <div
@@ -185,8 +185,39 @@ export default function UserSubscription({ userId, onExtendTrial }: UserSubscrip
                             </div>
                         ))}
                     </div>
-                </div>
-            )}
+                ) : (
+                    <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="bg-red-50 border border-red-100 rounded-lg p-4"
+                    >
+                        <div className="flex items-start space-x-3">
+                            <div className="flex-shrink-0">
+                                <ShieldAlert className="h-6 w-6 text-red-500" />
+                            </div>
+                            <div>
+                                <h4 className="text-sm font-medium text-red-800">No Payment Method Added</h4>
+                                <p className="mt-1 text-sm text-red-700">
+                                    This user hasn&apos;t added any payment methods yet. They will need to add a payment method before their trial ends on {formatDate(subscription.trial_end_date)}.
+                                </p>
+                                {subscription.status === 'TRIAL' && (
+                                    <div className="mt-3">
+                                        <p className="text-sm font-medium text-red-800">
+                                            Trial Status:
+                                        </p>
+                                        <div className="mt-1 flex items-center space-x-2">
+                                            <Clock className="h-4 w-4 text-red-500" />
+                                            <span className="text-sm text-red-700">
+                                                {subscription.days_left_for_trial} days remaining
+                                            </span>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </div>
         </motion.div>
     );
 }

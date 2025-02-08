@@ -1,3 +1,11 @@
+export interface UserMetadata {
+    url: string;
+    source_ip: string;
+    user_agent: string;
+    signup_timestamp: string | "N/A";
+    platform?: string | null;
+}
+
 export interface BusinessProfile {
     id: string;
     created_at: string;
@@ -44,4 +52,16 @@ export interface UserDetail {
     business_size: string;
     is_staff: boolean;
     is_superuser: boolean;
+    gender?: string;
+    birth_date?: string;
+    business_category?: string;
+    old_calender_method?: string;
+    has_affiliate: boolean;
+    metadata?: UserMetadata;
+    utm_source?: string;
+    utm_medium?: string;
+    utm_campaign?: string;
+    utm_term?: string;
+    utm_content?: string;
+    selected_plan_id?: number;
 }

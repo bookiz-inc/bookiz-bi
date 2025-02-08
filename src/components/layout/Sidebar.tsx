@@ -292,12 +292,13 @@ export default function Sidebar() {
                     {/* Mobile user profile */}
                     <div className="border-t border-gray-200 p-4">
                         <div className="flex items-center">
-                            <div className="h-8 w-8 rounded-full bg-primary-200 overflow-hidden">
+                            <div className="h-8 w-8 rounded-full bg-primary-200 overflow-hidden relative">
                                 {user?.imageUrl && (
-                                    <img
+                                    <Image
                                         src={user.imageUrl}
                                         alt="Profile"
-                                        className="h-full w-full object-cover"
+                                        fill
+                                        className="object-cover"
                                     />
                                 )}
                             </div>
@@ -343,12 +344,13 @@ export default function Sidebar() {
                     <div className="flex-shrink-0 border-t border-gray-200">
 
                         <div className="flex items-center p-4">
-                            <div className="h-8 w-8 rounded-full bg-primary-200 overflow-hidden">
+                            <div className="h-8 w-8 rounded-full bg-primary-200 overflow-hidden relative">
                                 {user?.imageUrl && (
-                                    <img
+                                    <Image
                                         src={user.imageUrl}
                                         alt="Profile"
-                                        className="h-full w-full object-cover"
+                                        fill
+                                        className="object-cover"
                                     />
                                 )}
                             </div>

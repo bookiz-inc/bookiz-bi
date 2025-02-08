@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { UserCheck, Gift, Calendar, Tag, AlertCircle, RefreshCcw } from 'lucide-react';
 import type { UserAffiliation } from '@/types/userAffiliation';
@@ -15,7 +15,7 @@ export default function UserAffiliation({ userId }: UserAffiliationProps) {
   const [error, setError] = useState<string | null>(null);
   const [isRetrying, setIsRetrying] = useState(false);
 
-  const fetchAffiliation = async () => {
+  const fetchAffiliation = useCallback(async () => {
     try {
       setError(null);
       setIsLoading(true);
@@ -47,11 +47,11 @@ export default function UserAffiliation({ userId }: UserAffiliationProps) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [userId]);
 
   useEffect(() => {
     fetchAffiliation();
-  }, [userId]);
+  }, [fetchAffiliation]);
 
   if (isLoading) {
     return (
