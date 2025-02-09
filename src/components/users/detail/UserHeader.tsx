@@ -19,6 +19,7 @@ import { UserDetail } from "@/types/userDetail";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import DeleteUserButton from './DeleteUserButton';
+import Image from 'next/image';
 
 interface UserHeaderProps {
     user: UserDetail;
@@ -87,9 +88,11 @@ export default function UserHeader({ user, onRefresh, isRefreshing = false }: Us
                         >
                             <div className="h-24 w-24 rounded-2xl bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center shadow-lg">
                                 {user.profile_image ? (
-                                    <img
+                                    <Image
                                         src={user.profile_image}
                                         alt={`${user.first_name} ${user.last_name}`}
+                                        width={96}
+                                        height={96}
                                         className="h-24 w-24 rounded-2xl object-cover"
                                     />
                                 ) : (

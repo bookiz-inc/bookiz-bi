@@ -15,7 +15,8 @@ import {
   AlertCircle,
   TrendingUp,
   SortAsc,
-  SortDesc
+  SortDesc,
+  PlusCircle
 } from "lucide-react";
 import type { User, Subscription } from "@/types/user";
 import { FilterOptions, SortOptions } from "./UserFilters";
@@ -25,42 +26,43 @@ interface UsersTableProps {
   searchQuery: string;
   filters: FilterOptions;
   sort: SortOptions;
+  onSortChange: (newSort: SortOptions) => void;
 }
 
-export default function UsersTable({ users, searchQuery, filters, sort }: UsersTableProps) {
+export default function UsersTable({ users, searchQuery, filters, sort, onSortChange }: UsersTableProps) {
   const router = useRouter();
 
   const filteredAndSortedUsers = users
     .filter((user) => {
       const searchLower = searchQuery.toLowerCase();
-      const matchesSearch = 
+      const matchesSearch =
         user.first_name.toLowerCase().includes(searchLower) ||
         user.last_name.toLowerCase().includes(searchLower) ||
         user.email.toLowerCase().includes(searchLower) ||
         user.phone_number.includes(searchQuery) ||
         user.business?.name?.toLowerCase().includes(searchLower);
 
-      const matchesStatus = !filters.status || 
+      const matchesStatus = !filters.status ||
         (filters.status === 'verified' ? user.business.is_payment_verified : !user.business.is_payment_verified);
 
-      const matchesPlan = !filters.subscriptionPlan || 
+      const matchesPlan = !filters.subscriptionPlan ||
         user.business?.subscription?.plan?.billing_cycle === filters.subscriptionPlan;
 
       const matchesSubscriptionStatus = !filters.subscriptionStatus ||
         user.business?.subscription?.status === filters.subscriptionStatus;
 
-      const matchesAffiliation = !filters.hasAffiliation || 
+      const matchesAffiliation = !filters.hasAffiliation ||
         (filters.hasAffiliation === 'true' ? !!user.business?.referred_by : !user.business?.referred_by);
 
       const matchesPaymentToken = !filters.hasPaymentToken ||
         (filters.hasPaymentToken === 'true' ? user.business?.subscription?.has_token : !user.business?.subscription?.has_token);
 
-      return matchesSearch && matchesStatus && matchesPlan && matchesSubscriptionStatus && 
-             matchesAffiliation && matchesPaymentToken;
+      return matchesSearch && matchesStatus && matchesPlan && matchesSubscriptionStatus &&
+        matchesAffiliation && matchesPaymentToken;
     })
     .sort((a, b) => {
       const direction = sort.direction === 'asc' ? 1 : -1;
-      
+
       switch (sort.field) {
         case 'date_joined':
           return (new Date(a.date_joined).getTime() - new Date(b.date_joined).getTime()) * direction;
@@ -74,7 +76,7 @@ export default function UsersTable({ users, searchQuery, filters, sort }: UsersT
   const getSubscriptionBadgeColor = (subscription: Subscription) => {
     switch (subscription.status) {
       case 'ACTIVE':
-        return subscription.plan.billing_cycle === 'YEARLY' 
+        return subscription.plan.billing_cycle === 'YEARLY'
           ? 'bg-yellow-100 text-yellow-800'
           : 'bg-purple-100 text-purple-800';
       case 'TRIAL':
@@ -136,7 +138,19 @@ export default function UsersTable({ users, searchQuery, filters, sort }: UsersT
   };
 
   const handleSortChange = (field: string) => {
-    // Implement the logic to handle sort change
+    if (sort.field === field) {
+      // Toggle direction if clicking the same field
+      onSortChange({
+        ...sort,
+        direction: sort.direction === 'asc' ? 'desc' : 'asc'
+      });
+    } else {
+      // Set new field with default desc direction
+      onSortChange({
+        field,
+        direction: 'desc'
+      });
+    }
   };
 
   return (
@@ -145,28 +159,23 @@ export default function UsersTable({ users, searchQuery, filters, sort }: UsersT
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th scope="col" className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                <div className="flex items-center space-x-1">
+              <th scope="col" className="px-2 py-4  sm:p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <div className="flex items-center">
                   <span>User Details</span>
-                  <button onClick={() => handleSortChange('name')} className="ml-1 p-1 hover:bg-gray-100 rounded">
+                  <button onClick={() => handleSortChange('name')} className="hover:bg-gray-100 rounded">
                     {sort.field === 'name' ? (
                       sort.direction === 'asc' ? <SortAsc className="h-3 w-3" /> : <SortDesc className="h-3 w-3" />
                     ) : null}
                   </button>
                 </div>
               </th>
-              <th scope="col" className="hidden md:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                <div className="flex items-center justify-between">
+              <th scope="col" className="md:table-cell px-2 py-4  sm:p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <div className="flex items-center">
                   <span>Subscription Status</span>
                 </div>
               </th>
-              <th scope="col" className="hidden lg:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                <div className="flex items-center justify-between">
-                  <span>Business Info</span>
-                </div>
-              </th>
-              <th scope="col" className="hidden sm:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                <div className="flex items-center space-x-1">
+              <th scope="col" className="hidden sm:table-cell px-2 py-4  sm:p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <div className="flex items-center">
                   <span>Appointments</span>
                   <button onClick={() => handleSortChange('future_appointments')} className="ml-1 p-1 hover:bg-gray-100 rounded">
                     {sort.field === 'future_appointments' ? (
@@ -175,8 +184,8 @@ export default function UsersTable({ users, searchQuery, filters, sort }: UsersT
                   </button>
                 </div>
               </th>
-              <th scope="col" className="hidden md:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                <div className="flex items-center space-x-1">
+              <th scope="col" className="hidden md:table-cell px-2 py-4  sm:p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <div className="flex items-center">
                   <span>Join Date</span>
                   <button onClick={() => handleSortChange('date_joined')} className="ml-1 p-1 hover:bg-gray-100 rounded">
                     {sort.field === 'date_joined' ? (
@@ -185,12 +194,7 @@ export default function UsersTable({ users, searchQuery, filters, sort }: UsersT
                   </button>
                 </div>
               </th>
-              <th scope="col" className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                <div className="flex items-center justify-between">
-                  <span>Status</span>
-                </div>
-              </th>
-              <th scope="col" className="relative px-4 sm:px-6 py-3">
+              <th scope="col" className="hidden md:table-cell px-2 py-4  sm:p-4 uppercase tracking-wider">
                 <span className="sr-only">Actions</span>
               </th>
             </tr>
@@ -205,99 +209,99 @@ export default function UsersTable({ users, searchQuery, filters, sort }: UsersT
                 className="hover:bg-gray-50 cursor-pointer group"
                 onClick={() => router.push(`/users/${user.id}`)}
               >
-                <td className="px-4 sm:px-6 py-4">
+                <td className="px-2 py-4  sm:p-4">
                   <div className="flex items-center">
-                    <div className="h-8 w-8 sm:h-10 sm:w-10 flex-shrink-0">
+                    {/* <div className="h-8 w-8 sm:h-10 sm:w-10 flex-shrink-0">
                       <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary-100 flex items-center justify-center">
                         <span className="text-primary-700 text-sm sm:text-base font-medium">
                           {user.first_name[0]}{user.last_name[0]}
                         </span>
                       </div>
-                    </div>
+                    </div> */}
                     <div className="ml-3 sm:ml-4">
                       <div className="flex flex-col sm:flex-row sm:items-center">
                         <div className="text-sm font-medium text-gray-900">
                           {user.first_name} {user.last_name}
                         </div>
-                        <div className="mt-1 sm:mt-0 sm:ml-2">
-                          {user.business.is_payment_verified ? (
-                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-50 text-green-800">
-                              <div className="w-1 h-1 rounded-full bg-green-400 mr-1"></div>
-                              System Access
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-50 text-red-800">
-                              <div className="w-1 h-1 rounded-full bg-red-400 mr-1"></div>
-                              No Access
-                            </span>
-                          )}
-                        </div>
                       </div>
                       <div className="text-xs sm:text-sm text-gray-500 mt-1">
-                        <div className="flex items-center space-x-2">
-                          <Mail className="h-3 w-3" />
-                          <span className="truncate max-w-[150px] sm:max-w-none">{user.email}</span>
-                        </div>
                         <div className="flex items-center space-x-2 mt-1">
                           <Phone className="h-3 w-3" />
                           <span>{user.phone_number}</span>
                         </div>
+                        <div className="flex items-center space-x-2 mt-1">
+                          {user.business.is_payment_verified ? (
+                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                              <CheckCircle2 className="w-3 h-3 mr-1" />
+                              Active
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                              <XCircle className="w-3 h-3 mr-1" />
+                              Inactive
+                            </span>
+                          )}
+                        </div>
                       </div>
                       {/* Mobile-only subscription status */}
-                      <div className="md:hidden mt-2">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                          getSubscriptionBadgeColor(user.business.subscription)
-                        }`}>
-                          <Crown className="w-3 h-3 mr-1" />
+                      <div className="md:hidden mt-1">
+                        {/* <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getSubscriptionBadgeColor(user.business.subscription)
+                          }`}>
+                          <Crown className="w-3 h-3" />
                           {getSubscriptionStatusText(user.business.subscription)}
-                        </span>
+                        </span> */}
+
+                        {(() => {
+                          const { color, icon: Icon } = getFutureAppointmentsBadge(user.business.future_appointments);
+                          return (
+                            <motion.span
+                              initial={{ scale: 0.9 }}
+                              animate={{ scale: 1 }}
+                              className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${color}`}
+                            >
+                              <Icon className="w-3 h-3 mr-1" />
+                              Appointments
+                            </motion.span>
+                          );
+                        })()}
                       </div>
                     </div>
                   </div>
                 </td>
 
-                <td className="hidden md:table-cell px-6 py-4 whitespace-nowrap">
+                <td className="md:table-cell px-2 py-4  sm:p-4 whitespace-nowrap">
                   <div className="flex flex-col">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      getSubscriptionBadgeColor(user.business.subscription)
-                    }`}>
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium w-fit ${getSubscriptionBadgeColor(user.business.subscription)
+                      }`}>
                       <Crown className="w-3 h-3 mr-1" />
                       {getSubscriptionStatusText(user.business.subscription)}
                     </span>
-                    {user.business.subscription.is_trial && (
-                      <div className="text-xs text-gray-500 mt-1">
-                        Expires: {new Date(user.business.subscription.trial_end_date).toLocaleDateString()}
-                      </div>
-                    )}
                     {!user.business.subscription.has_token && (
-                      <span className="mt-1 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-50 text-red-700">
+                      <span className="mt-1 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium w-fit bg-red-50 text-red-700">
                         <AlertCircle className="w-3 h-3 mr-1" />
                         No Payment Method
                       </span>
                     )}
-                  </div>
-                </td>
-
-                <td className="hidden lg:table-cell px-6 py-4 whitespace-nowrap">
-                  <div className="flex flex-col">
-                    <div className="text-sm font-medium text-gray-900">
-                      {user.business.name || 'No Business Name'}
-                    </div>
-                    <div className="text-xs text-gray-500 mt-1">
-                      ID: {user.business.id.slice(0, 8)}
-                    </div>
                     {user.business.referred_by && (
                       <div className="flex items-center mt-1">
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-50 text-indigo-700">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium w-fit bg-indigo-50 text-indigo-700">
                           <Building2 className="w-3 h-3 mr-1" />
                           Referred by: {user.business.referred_by.name}
                         </span>
                       </div>
                     )}
+                    {user.date_joined && (
+                      <div className="md:hidden flex items-center mt-1">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium w-fit bg-gray-100 text-gray-700">
+                          <PlusCircle className="w-3 h-3 mr-1" />
+                          Joined: {new Date(user.date_joined).toLocaleDateString("he-IL").replace(/\./g, "/")}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </td>
 
-                <td className="hidden sm:table-cell px-6 py-4 whitespace-nowrap">
+                <td className="hidden sm:table-cell px-2 py-4  sm:p-4 whitespace-nowrap">
                   {(() => {
                     const { color, icon: Icon, text } = getFutureAppointmentsBadge(user.business.future_appointments);
                     return (
@@ -313,14 +317,10 @@ export default function UsersTable({ users, searchQuery, filters, sort }: UsersT
                   })()}
                 </td>
 
-                <td className="hidden md:table-cell px-6 py-4 whitespace-nowrap">
+                <td className="hidden md:table-cell px-2 py-4  sm:p-4 whitespace-nowrap">
                   <div className="flex flex-col">
                     <div className="text-sm text-gray-900">
-                      {new Date(user.date_joined).toLocaleDateString('en-GB', {
-                        day: '2-digit',
-                        month: 'short',
-                        year: 'numeric'
-                      })}
+                      {new Date(user.date_joined).toLocaleDateString("he-IL").replace(/\./g, "/")}
                     </div>
                     <div className="text-xs text-gray-500 mt-1">
                       {new Date(user.date_joined).toLocaleTimeString('en-GB', {
@@ -331,22 +331,8 @@ export default function UsersTable({ users, searchQuery, filters, sort }: UsersT
                   </div>
                 </td>
 
-                <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
-                  {user.business.is_payment_verified ? (
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                      <CheckCircle2 className="w-3 h-3 mr-1" />
-                      Verified
-                    </span>
-                  ) : (
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                      <XCircle className="w-3 h-3 mr-1" />
-                      Unverified
-                    </span>
-                  )}
-                </td>
-
                 <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <ChevronRight className="h-5 w-5 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <ChevronRight className="h-5 w-5 text-gray-400 opacity-70 group-hover:opacity-100 transition-opacity" />
                 </td>
               </motion.tr>
             ))}

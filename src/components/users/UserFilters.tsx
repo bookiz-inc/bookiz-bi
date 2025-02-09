@@ -54,7 +54,7 @@ export default function UserFilters({ onFilterChange, onSortChange }: UserFilter
     <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:flex-wrap sm:gap-3 items-start sm:items-center">
       <div className="w-full sm:w-auto flex flex-col sm:flex-row items-start sm:items-center gap-2">
         <div className="flex items-center gap-2 w-full sm:w-auto">
-          <Filter className="h-4 w-4 text-gray-500" />
+          <Filter className="h-4 w-4 text-gray-500 hidden sm:block" />
           <select
             value={filters.status}
             onChange={(e) => handleFilterChange('status', e.target.value)}

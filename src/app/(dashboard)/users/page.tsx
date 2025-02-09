@@ -1,27 +1,35 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search } from "lucide-react";
+import { useQueryState, useQueryStates, parseAsString, parseAsStringLiteral } from 'nuqs'
+import { Search, RotateCcw } from "lucide-react";
 import UsersTable from "@/components/users/UsersTable";
-import UserFilters, {FilterOptions, SortOptions} from "@/components/users/UserFilters";
+import UserFilters, { FilterOptions, SortOptions } from "@/components/users/UserFilters";
 import type { User } from "@/types/user";
+import MobileFilters from "@/components/users/MobileFilters";
+
+// Define parsers for the filter and sort states
+const filterParsers = {
+  status: parseAsString.withDefault(''),
+  subscriptionPlan: parseAsString.withDefault(''),
+  hasAffiliation: parseAsString.withDefault(''),
+  hasPaymentToken: parseAsString.withDefault(''),
+  subscriptionStatus: parseAsString.withDefault(''),
+};
+
+const sortParsers = {
+  field: parseAsString.withDefault('date_joined'),
+  direction: parseAsStringLiteral(['asc', 'desc'] as const).withDefault('desc'),
+};
 
 export default function UsersPage() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useQueryState('q', parseAsString.withDefault(''));
+  const [filters, setFilters] = useQueryStates(filterParsers);
+  const [sort, setSort] = useQueryStates(sortParsers);
+  
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [filters, setFilters] = useState<FilterOptions>({
-    status: '',
-    subscriptionPlan: '',
-    hasAffiliation: '',
-    hasPaymentToken: '',
-    subscriptionStatus: '',
-  });
-  const [sort, setSort] = useState<SortOptions>({
-    field: 'date_joined',
-    direction: 'desc',
-  });
 
   useEffect(() => {
     fetchUsers();
@@ -47,6 +55,21 @@ export default function UsersPage() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleReset = () => {
+    setSearchQuery(null);
+    setFilters({
+      status: '',
+      subscriptionPlan: '',
+      hasAffiliation: '',
+      hasPaymentToken: '',
+      subscriptionStatus: '',
+    });
+    setSort({
+      field: 'date_joined',
+      direction: 'desc',
+    });
   };
 
   if (isLoading) {
@@ -88,8 +111,8 @@ export default function UsersPage() {
             <input
               type="search"
               placeholder="Search by name, email, or business..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              value={searchQuery ?? ''}
+              onChange={(e) => setSearchQuery(e.target.value || null)}
               className="block w-full rounded-md border border-gray-200 py-2 pl-10 pr-3 text-sm
                        placeholder:text-gray-500 focus:border-primary-500 focus:outline-none
                        focus:ring-1 focus:ring-primary-500"
@@ -97,17 +120,45 @@ export default function UsersPage() {
           </div>
         </div>
 
-        <UserFilters
-          onFilterChange={setFilters}
-          onSortChange={setSort}
+        <MobileFilters
+          onFilterChange={(newFilters) => {
+            setFilters(newFilters);
+          }}
+          onSortChange={(newSort) => {
+            setSort(newSort);
+          }}
+          onReset={handleReset}
         />
+
+        <div className="hidden md:block">
+          <div className="flex items-center gap-4">
+            <div className="flex-1">
+              <UserFilters
+                onFilterChange={(newFilters) => {
+                  setFilters(newFilters);
+                }}
+                onSortChange={(newSort) => {
+                  setSort(newSort);
+                }}
+              />
+            </div>
+            <button
+              onClick={handleReset}
+              className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg"
+              title="Reset all filters"
+            >
+              <RotateCcw className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
       </div>
 
       <UsersTable
         users={users}
-        searchQuery={searchQuery}
+        searchQuery={searchQuery ?? ''}
         filters={filters}
         sort={sort}
+        onSortChange={setSort}
       />
     </div>
   );
