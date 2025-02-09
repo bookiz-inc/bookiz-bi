@@ -57,7 +57,7 @@ export default function UserMetrics({ usage }: UserMetricsProps) {
     // Boolean metrics
     const checkMetrics = [
         {
-            label: 'Has Appointments',
+            label: 'Future Appointments',
             value: usage.has_appointments,
             icon: Calendar,
         },
@@ -159,8 +159,8 @@ export default function UserMetrics({ usage }: UserMetricsProps) {
                     <span className="ml-2 text-sm text-gray-500">Last Login:</span>
                 </div>
                 <span className="text-sm font-medium text-gray-900">
-          {new Date(usage.last_login).toLocaleString()}
-        </span>
+                    {new Date(usage.last_login).toLocaleString()}
+                </span>
             </motion.div>
         </div>
     );

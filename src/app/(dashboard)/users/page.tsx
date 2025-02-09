@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { useQueryState, useQueryStates, parseAsString, parseAsStringLiteral } from 'nuqs'
-import { Search, RotateCcw } from "lucide-react";
+import { Search, RotateCcw, Check } from "lucide-react";
 import UsersTable from "@/components/users/UsersTable";
 import UserFilters, { FilterOptions, SortOptions } from "@/components/users/UserFilters";
 import type { User } from "@/types/user";
 import MobileFilters from "@/components/users/MobileFilters";
+import { useFilteredUsers } from '@/hooks/useFilteredUsers';
 
 // Define parsers for the filter and sort states
 const filterParsers = {
@@ -15,6 +16,7 @@ const filterParsers = {
   hasAffiliation: parseAsString.withDefault(''),
   hasPaymentToken: parseAsString.withDefault(''),
   subscriptionStatus: parseAsString.withDefault(''),
+  futureAppointments: parseAsString.withDefault(''),
 };
 
 const sortParsers = {
@@ -26,7 +28,7 @@ export default function UsersPage() {
   const [searchQuery, setSearchQuery] = useQueryState('q', parseAsString.withDefault(''));
   const [filters, setFilters] = useQueryStates(filterParsers);
   const [sort, setSort] = useQueryStates(sortParsers);
-  
+
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -65,12 +67,15 @@ export default function UsersPage() {
       hasAffiliation: '',
       hasPaymentToken: '',
       subscriptionStatus: '',
+      futureAppointments: '',
     });
     setSort({
       field: 'date_joined',
       direction: 'desc',
     });
   };
+
+  const filteredUsers = useFilteredUsers(users, searchQuery ?? '', filters);
 
   if (isLoading) {
     return (
@@ -99,7 +104,32 @@ export default function UsersPage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-900">Users</h1>
+        <div className="flex items-center gap-3">
+          <h1 className="text-3xl font-bold text-gray-900">Users</h1>
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-lg font-medium bg-primary-100 text-primary-800">
+            {filteredUsers.length}
+            {filteredUsers.length !== users.length && (
+              <span className="ml-1 text-sm text-primary-600">/ {users.length}</span>
+            )}
+          </span>
+          <button
+            onClick={handleReset}
+            className="flex items-center gap-1 px-2.5 py-1.5 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:text-gray-600"
+            disabled={Object.values(filters).every(value => value === '')}
+          >
+            {Object.values(filters).some(value => value !== '') ? (
+              <>
+                <RotateCcw className="w-4 h-4" />
+                <span>Reset Filters</span>
+              </>
+            ) : (
+              <>
+                <RotateCcw className="w-4 h-4" />
+                <span>No Filters</span>
+              </>
+            )}
+          </button>
+        </div>
       </div>
 
       <div className="flex flex-col gap-4">
@@ -154,7 +184,7 @@ export default function UsersPage() {
       </div>
 
       <UsersTable
-        users={users}
+        users={filteredUsers}
         searchQuery={searchQuery ?? ''}
         filters={filters}
         sort={sort}

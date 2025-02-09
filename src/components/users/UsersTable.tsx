@@ -71,7 +71,7 @@ export default function UsersTable({ users, searchQuery, filters, sort, onSortCh
         default:
           return 0;
       }
-    });
+    })
 
   const getSubscriptionBadgeColor = (subscription: Subscription) => {
     switch (subscription.status) {
@@ -113,7 +113,7 @@ export default function UsersTable({ users, searchQuery, filters, sort, onSortCh
     if (count === 0) {
       return {
         color: 'bg-red-100 text-red-800',
-        icon: AlertCircle,
+        icon: Calendar,
         text: 'No Appointments'
       };
     } else if (count > 10) {
@@ -331,7 +331,7 @@ export default function UsersTable({ users, searchQuery, filters, sort, onSortCh
                   </div>
                 </td>
 
-                <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <td className="px-2 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <ChevronRight className="h-5 w-5 text-gray-400 opacity-70 group-hover:opacity-100 transition-opacity" />
                 </td>
               </motion.tr>
