@@ -1,5 +1,9 @@
 "use client";
 
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+
+dayjs.extend(relativeTime)
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
@@ -321,12 +325,15 @@ export default function UsersTable({ users, searchQuery, filters, sort, onSortCh
                   <div className="flex flex-col">
                     <div className="text-sm text-gray-900">
                       {new Date(user.date_joined).toLocaleDateString("he-IL").replace(/\./g, "/")}
+                      <span className="text-xs text-gray-500">
+                        {" ("}{new Date(user.date_joined).toLocaleTimeString('en-GB', {
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}{")"}
+                      </span>
                     </div>
                     <div className="text-xs text-gray-500 mt-1">
-                      {new Date(user.date_joined).toLocaleTimeString('en-GB', {
-                        hour: '2-digit',
-                        minute: '2-digit'
-                      })}
+                      {dayjs(user.date_joined).fromNow(true) + ' ago'}
                     </div>
                   </div>
                 </td>
