@@ -50,9 +50,9 @@ export default function UserMarketing({ user }: UserMarketingProps) {
                     <div className="bg-green-50 rounded-lg p-4">
                         <div className="flex items-center mb-2">
                             <Target className="h-5 w-5 text-green-600 mr-2" />
-                            <span className="text-sm font-medium text-green-900">Campaign</span>
+                            <span className="text-sm font-medium text-green-900">Content</span>
                         </div>
-                        <p className="text-green-700">{user.utm_campaign}</p>
+                        <p className="text-green-700">{user.utm_content}</p>
                     </div>
                 )}
             </div>
@@ -95,4 +95,4 @@ export default function UserMarketing({ user }: UserMarketingProps) {
             </div>
         </motion.div>
     );
-} 
+}
