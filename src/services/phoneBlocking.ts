@@ -15,7 +15,11 @@ const API_BASE_URL = 'http://localhost:8000/api/v1/auth';
 
 export const PhoneBlockingService = {
     async listBlockedNumbers(): Promise<BlockedNumber[]> {
-        const response = await fetch(`${API_BASE_URL}/blocked-numbers/`);
+        const response = await fetch(`${API_BASE_URL}/blocked-numbers/`, {
+            headers: {
+                'X-Frontend-Token' :'0suV43CiTkrrzk3Q'
+            },
+        });
         if (!response.ok) {
             throw new Error('Failed to fetch blocked numbers');
         }
@@ -27,6 +31,7 @@ export const PhoneBlockingService = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'X-Frontend-Token' :'0suV43CiTkrrzk3Q'
             },
             body: JSON.stringify(data),
         });
@@ -42,6 +47,9 @@ export const PhoneBlockingService = {
     async unblockNumber(phoneNumber: string): Promise<{ message: string }> {
         const response = await fetch(`${API_BASE_URL}/unblock-number/?phone_number=${encodeURIComponent(phoneNumber)}`, {
             method: 'DELETE',
+            headers: {
+                'X-Frontend-Token' :'0suV43CiTkrrzk3Q'
+            },
         });
         
         if (!response.ok) {
