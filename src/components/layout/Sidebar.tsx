@@ -51,8 +51,11 @@ const navigation = [
     },
     {
         name: "Users",
-        href: "/users",
         icon: Users,
+        subItems: [
+            {name: "All Users", href: "/users", icon: Users},
+            {name: "Phone Blocking", href: "/users/phone-blocking", icon: Shield},
+        ]
     },
     {
         name: "Subscriptions",
