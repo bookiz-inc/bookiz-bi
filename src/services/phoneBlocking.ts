@@ -11,7 +11,7 @@ export interface BlockNumberRequest {
     reason?: string;
 }
 
-const API_BASE_URL = 'http://localhost:8000/api/v1/auth';
+const API_BASE_URL = 'https://leo.bookiz.co.il/api/v1/auth';
 
 export const PhoneBlockingService = {
     async listBlockedNumbers(): Promise<BlockedNumber[]> {
