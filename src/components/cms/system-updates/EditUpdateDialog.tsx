@@ -97,7 +97,7 @@ export default function EditUpdateDialog({
       };
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/notifications/updates/${update.id}/update/`,
+        `${process.env.BASE_URL}/api/v1/notifications/updates/${update.id}/update/`,
         {
           method: "PUT",
           headers: {
@@ -289,4 +289,4 @@ export default function EditUpdateDialog({
       </DialogContent>
     </Dialog>
   );
-} 
+}

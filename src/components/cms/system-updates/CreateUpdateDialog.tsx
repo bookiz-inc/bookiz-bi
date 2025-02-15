@@ -81,7 +81,7 @@ export default function CreateUpdateDialog({
       };
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/notifications/updates/create/`,
+        `${process.env.BASE_URL}/api/v1/notifications/updates/create/`,
         {
           method: "POST",
           headers: {
@@ -275,4 +275,4 @@ export default function CreateUpdateDialog({
       </DialogContent>
     </Dialog>
   );
-} 
+}

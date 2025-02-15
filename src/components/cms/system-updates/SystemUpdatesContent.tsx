@@ -15,10 +15,10 @@ export default function SystemUpdatesContent() {
   const refreshData = useCallback(() => {
     setRefreshTrigger(prev => prev + 1);
   }, []);
-  
+
   const handleBulkDelete = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/notifications/updates/bulk-delete/`, {
+      const response = await fetch(`${process.env.BASE_URL}/api/v1/notifications/updates/bulk-delete/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -50,7 +50,7 @@ export default function SystemUpdatesContent() {
 
   const handleBulkToggleActive = async (isActive: boolean) => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/notifications/updates/bulk-toggle-active/`, {
+      const response = await fetch(`${process.env.BASE_URL}/api/v1/notifications/updates/bulk-toggle-active/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -134,4 +134,4 @@ export default function SystemUpdatesContent() {
       />
     </div>
   );
-} 
+}
