@@ -14,6 +14,7 @@ import UserAffiliation from "./UserAffiliation";
 import UserSubscription from './UserSubscription';
 import UserMarketing from './UserMarketing';
 import ExtendTrialModal from './ExtendTrialModal';
+import { QuickActions } from './QuickActions';
 
 interface SubscriptionInfo {
     id: string;
@@ -149,6 +150,8 @@ export default function UserDetailContent({ userId }: { userId: string }) {
                 onRefresh={handleRefresh}
                 isRefreshing={isRefreshing}
             />
+
+            <QuickActions user={user} onActionComplete={handleRefresh} />
 
             {usage && <UserMetrics usage={usage} />}
 

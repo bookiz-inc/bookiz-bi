@@ -30,7 +30,9 @@ import {
     Workflow,
     ListChecks,
     ClipboardList,
-    Shield
+    Shield,
+    FileText,
+    Newspaper
 
 } from "lucide-react";
 
@@ -73,6 +75,13 @@ const navigation = [
             {name: "Broadcast Messages", href: "/marketing/broadcast", icon: MessageSquare},
             {name: "Landing Pages", href: "/marketing/landing-pages", icon: Webhook},
             {name: "WhatsApp Templates", href: "/marketing/whatsapp-templates", icon: MessageSquare},
+        ]
+    },
+    {
+        name: "CMS",
+        icon: Newspaper,
+        subItems: [
+            {name: "System Updates", href: "/cms/system-updates", icon: FileText},
         ]
     },
     {
