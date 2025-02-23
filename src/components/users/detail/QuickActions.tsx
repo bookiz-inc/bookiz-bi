@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Shield, Ban, Loader2 } from 'lucide-react';
+import { Shield, Ban, Loader2, Square, StopCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -72,33 +72,81 @@ export function QuickActions({ user, onActionComplete }: QuickActionsProps) {
         }
     };
 
+    const handleStopOnboarding = async () => {
+        setIsSubmitting(true);
+        try {
+            const response = await fetch(
+                `https://leo.bookiz.co.il/api/v1/onboarding/users/${user.id}/cancel/`,
+                {
+                    method: 'DELETE',
+                    headers: {
+                        'accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'X-Frontend-Token' :'0suV43CiTkrrzk3Q'
+                    }
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error('Failed to stop onboarding');
+            }
+
+            const data = await response.json();
+            toast({
+                title: "Success",
+                description: "User onboarding stopped successfully",
+            });
+            onActionComplete?.();
+        } catch (error: any) {
+            toast({
+                title: "Error",
+                description: error.message || "Failed to stop onboarding",
+                variant: "destructive",
+            });
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
     return (
         <div className="bg-white rounded-lg shadow-lg p-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Quick Actions</h2>
             
-            <div className="space-y-4">
+            <div className="flex flex-wrap gap-3">
                 {user.business.is_payment_verified ? (
                     <Button
-                        variant="destructive"
-                        className="w-full sm:w-auto"
+                        variant="outline"
+                        className="w-full sm:w-auto bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white hover:text-white border-none shadow-md hover:shadow-lg transition-all duration-200 font-semibold"
                         onClick={() => setIsBlockDialogOpen(true)}
                         disabled={isSubmitting}
                     >
-                        <Ban className="mr-2 h-4 w-4" />
+                        <span className="mr-2 text-lg" role="img" aria-label="no entry">⛔️</span>
                         Block Business
+                        {isSubmitting && <Loader2 className="ml-2 h-4 w-4 animate-spin" />}
                     </Button>
                 ) : (
                     <Button
                         variant="outline"
-                        className="w-full sm:w-auto"
+                        className="w-full sm:w-auto bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white hover:text-white border-none shadow-md hover:shadow-lg transition-all duration-200 font-semibold"
                         onClick={handleUnblock}
                         disabled={isSubmitting}
                     >
-                        <Shield className="mr-2 h-4 w-4" />
+                        <span className="mr-2 text-lg" role="img" aria-label="shield">🛡️</span>
                         Unblock Business
                         {isSubmitting && <Loader2 className="ml-2 h-4 w-4 animate-spin" />}
                     </Button>
                 )}
+
+                <Button
+                    variant="outline"
+                    className="w-full sm:w-auto bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white hover:text-white border-none shadow-md hover:shadow-lg transition-all duration-200 font-semibold"
+                    onClick={handleStopOnboarding}
+                    disabled={isSubmitting}
+                >
+                    <span className="mr-2 text-lg" role="img" aria-label="stop sign">🛑</span>
+                    Stop Onboarding
+                    {isSubmitting && <Loader2 className="ml-2 h-4 w-4 animate-spin" />}
+                </Button>
             </div>
 
             <Dialog open={isBlockDialogOpen} onOpenChange={setIsBlockDialogOpen}>

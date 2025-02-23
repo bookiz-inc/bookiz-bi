@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8000/api/v1/auth';
+const API_BASE_URL = 'https://leo.bookiz.com/api/v1/business';
 
 export interface BlockBusinessRequest {
     business_id: string;
