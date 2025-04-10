@@ -52,18 +52,18 @@ export function AffiliateSignupForm() {
 
   const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value;
-    
+
     // Remove any non-digit characters
     value = value.replace(/\D/g, '');
-    
+
     // Ensure the number starts with 0
     if (value && value[0] !== '0') {
       value = '0' + value;
     }
-    
+
     // Limit to 10 digits (Israeli phone number format)
     value = value.slice(0, 10);
-    
+
     setFormData({ ...formData, phone_number: value });
   };
 
